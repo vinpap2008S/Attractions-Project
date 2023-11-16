@@ -1,5 +1,6 @@
 root = Tk()
 
+
 screen_width = root.winfo_screenwidth()  # длина
 screen_height = root.winfo_screenheight()  # высота экрана
 
