@@ -15,7 +15,7 @@ class App(customtkinter.CTk):
         fram3_name = ""
         # Создание окна
         self.title("image_example.py")
-        self.geometry("700x450")
+        self.after(0, lambda: self.state('zoomed'))
 
         # установиливаю макет сетки 1x2
         self.grid_rowconfigure(0, weight=1)
@@ -78,9 +78,8 @@ class App(customtkinter.CTk):
         self.third_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
 
         # Настройка
-
-        self.home_frame_frame_2_entry = customtkinter.CTkEntry(self.third_frame)
-        self.home_frame_frame_2_entry.grid()
+        self.home_frame_frame_2_entry = customtkinter.CTkEntry(self.third_frame,width=1000, height=50)
+        self.home_frame_frame_2_entry.grid(row=1, column=0, padx=20, pady=10, sticky="nsw")
 
         # Главный фрейм
         self.select_frame_by_name(framgl_name)
