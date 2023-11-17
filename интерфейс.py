@@ -28,6 +28,8 @@ class App(customtkinter.CTk):
         self.add_user_image = customtkinter.CTkImage(
             light_image=Image.open(os.path.join(image_path, "add_user_dark.png")),
             dark_image=Image.open(os.path.join(image_path, "add_user_light.png")), size=(20, 20))
+
+
         # Создание окна
         self.title("image_example.py")
         self.after(0, lambda: self.state('zoomed'))
@@ -35,23 +37,16 @@ class App(customtkinter.CTk):
         # create login frame
         self.login_frame = customtkinter.CTkFrame(self, corner_radius=0)
         self.login_frame.grid(row=0, column=0)
-        self.login_label = customtkinter.CTkLabel(self, text="CustomTkinter\nLogin Page",
+        self.login_label = customtkinter.CTkLabel(self.login_frame, text="Регистрация/Вход",
                                                   font=customtkinter.CTkFont(size=20, weight="bold"))
         self.login_label.grid(row=0, column=0, padx=30, pady=(150, 15))
-        self.username_entry = customtkinter.CTkEntry(self.login_frame, width=200, placeholder_text="username")
+        self.username_entry = customtkinter.CTkEntry(self.login_frame, width=200, placeholder_text="Логин")
         self.username_entry.grid(row=1, column=0, padx=30, pady=(15, 15))
-        self.password_entry = customtkinter.CTkEntry(self.login_frame, width=200, show="*", placeholder_text="password")
+        self.password_entry = customtkinter.CTkEntry(self.login_frame, width=200, show="*", placeholder_text="Пароль")
         self.password_entry.grid(row=2, column=0, padx=30, pady=(0, 15))
-        self.login_button = customtkinter.CTkButton(self.login_frame, text="Login", command=self.main, width=200)
+        self.login_button = customtkinter.CTkButton(self.login_frame, text="Войти", command=self.main, width=200)
         self.login_button.grid(row=3, column=0, padx=30, pady=(15, 15))
 
-        # create main frame
-        self.main_frame = customtkinter.CTkFrame(self, corner_radius=0)
-        self.main_frame.grid_columnconfigure(0, weight=1)
-        self.main_label = customtkinter.CTkLabel(self.main_frame, text="CustomTkinter\nMain Page",
-                                                 font=customtkinter.CTkFont(size=20, weight="bold"))
-        self.main_label.grid(row=0, column=0, padx=30, pady=(30, 15))
-        # self.mainloop()
 
     def select_frame_by_name(self, name):
         # Цвет кнопки от выбора
@@ -72,9 +67,10 @@ class App(customtkinter.CTk):
             self.third_frame.grid(row=0, column=1, sticky="nsew")
         else:
             self.third_frame.grid_forget()
-
     def main(self):
-        self.main_frame.grid_forget()
+        if self.login_event():
+            ...
+        self.login_frame.grid_forget()
         # установиливаю макет сетки 1x2
         self.grid_rowconfigure(0, weight=1)
         self.grid_columnconfigure(1, weight=1)
@@ -141,16 +137,12 @@ class App(customtkinter.CTk):
 
         # Главный фрейм
         self.select_frame_by_name(framgl_name)
-
     def home_button_event(self):
         self.select_frame_by_name(framgl_name)
-
     def frame_2_button_event(self):
         self.select_frame_by_name(fram1_name)
-
     def frame_3_button_event(self):
         self.select_frame_by_name(fram2_name)
-
     def change_appearance_mode_event(self, new_appearance_mode):
         if new_appearance_mode == 'Светлая':
             customtkinter.set_appearance_mode("light")
@@ -158,12 +150,11 @@ class App(customtkinter.CTk):
             customtkinter.set_appearance_mode("dark")
         else:
             customtkinter.set_appearance_mode("system")
-
     def login_event(self):
         print("Login pressed - username:", self.username_entry.get(), "password:", self.password_entry.get())
 
         self.login_frame.grid_forget()  # remove login frame
-        self.main_frame.grid(row=0, column=0, sticky="nsew", padx=100)  # show main frame
+        self.login_frame.grid(row=0, column=0, sticky="nsew", padx=100)  # show main frame
 
 
 if __name__ == "__main__":
