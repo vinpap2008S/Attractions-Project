@@ -78,6 +78,8 @@ class App(customtkinter.CTk):
         self.third_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
 
         # Настройка
+        self.navigation_frame_label = customtkinter.CTkLabel(self.third_frame, text="  Image Example")
+        self.navigation_frame_label.grid()
         self.home_frame_frame_2_entry = customtkinter.CTkEntry(self.third_frame,width=1000, height=50)
         self.home_frame_frame_2_entry.grid(row=1, column=0, padx=20, pady=10, sticky="nsw")
 
