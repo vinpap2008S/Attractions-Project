@@ -1,34 +1,32 @@
-root = Tk()
+import customtkinter
 
 
-screen_width = root.winfo_screenwidth()  # длина
-screen_height = root.winfo_screenheight()  # высота экрана
+class MyCheckboxFrame(customtkinter.CTkFrame):
+    def __init__(self, master):
+        super().__init__(master)
 
-notebook = ttk.Notebook()
-notebook.pack(expand=True, fill=BOTH, side=LEFT)
+        self.checkbox_1 = customtkinter.CTkCheckBox(self, text="checkbox 1")
+        self.checkbox_1.grid(row=0, column=0, padx=10, pady=(10, 0), sticky="w")
+        self.checkbox_2 = customtkinter.CTkCheckBox(self, text="checkbox 2")
+        self.checkbox_2.grid(row=1, column=0, padx=10, pady=(10, 0), sticky="w")
 
-frame1 = ttk.Frame(notebook)
-frame2 = ttk.Frame(notebook)
-frame3 = ttk.Frame(notebook)
-frame4 = ttk.Frame(notebook)
+class App(customtkinter.CTk):
+    def __init__(self):
+        super().__init__()
 
-notebook.add(frame1, text='1')
-notebook.add(frame2, text='2')
-notebook.add(frame3, text='3')
-notebook.add(frame4, text='4')
+        self.title("my app")
+        self.geometry("400x180")
+        self.grid_columnconfigure(0, weight=1)
+        self.grid_rowconfigure(0, weight=1)
 
-root['bg'] = '#fafafa'
-root.title('Название программы')
-root.geometry(f'{screen_width}x{screen_height}')
+        self.checkbox_frame = MyCheckboxFrame(self)
+        self.checkbox_frame.grid(row=0, column=0, padx=10, pady=(10, 0), sticky="nsw")
 
-title = ttk.Label(frame1, text='Подсказка', background='gray')
-title.pack()
+        self.button = customtkinter.CTkButton(self, text="my button", command=self.button_callback)
+        self.button.grid(row=3, column=0, padx=10, pady=10, sticky="ew")
 
-btn = ttk.Button(frame1, text='Кнопка', command=btn_clic)
-btn.pack()
+    def button_callback(self):
+        print("button pressed")
 
-loginInput = ttk.Entry(frame1, background='white')
-loginInput.pack()
-
-passwordInput = ttk.Entry(frame1, background='white')
-passwordInput.pack()
+app = App()
+app.mainloop()
