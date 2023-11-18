@@ -35,6 +35,7 @@ class App(customtkinter.CTk):
             # Создание окна
             self.title("image_example.py")
             self.after(0, lambda: self.state('zoomed'))
+            self.grid_columnconfigure(0, weight=1)
 
             # create login frame
             self.login_frame = customtkinter.CTkFrame(self, corner_radius=0)
@@ -170,7 +171,7 @@ class App(customtkinter.CTk):
                     return 0
                 else:
                     self.login_label1.grid_forget()
-                    self.login_label1 = customtkinter.CTkLabel(self.login_frame, text="Пароль или логин не правильный",
+                    self.login_label1 = customtkinter.CTkLabel(self.login_frame, text="Пароль или логин\nне правильный",
                                                                font=customtkinter.CTkFont(size=20, weight="bold"))
                     self.login_label1.grid(row=4, column=0)
                     return 1
