@@ -7,7 +7,7 @@ customtkinter.set_default_color_theme("dark-blue")
 class App(customtkinter.CTk):
     def __init__(self):
         super().__init__()
-        global framgl_name, fram1_name, fram2_name, fram3_name,login_frame
+        global framgl_name, fram1_name, fram2_name, fram3_name,login_frame,login_label
         framgl_name = "Главная"
         fram1_name = "Добавление обьектов"
         fram2_name = "Профиль"
@@ -36,22 +36,25 @@ class App(customtkinter.CTk):
             # Создание окна
             self.title("image_example.py")
             self.grid_rowconfigure(0, weight=1)
-            self.grid_columnconfigure(0, weight=1)
+            self.grid_columnconfigure(1, weight=1)
             self.after(0, lambda: self.state('zoomed'))
 
             # создаём логин фрейм
             self.login_frame = customtkinter.CTkFrame(self, width=2000, height=2000)
             self.login_frame.grid(row=0, column=0, padx=20, pady=20, sticky="nsew")
             self.login_label = customtkinter.CTkLabel(self.login_frame, text="Регистрация/Вход",
-                                                      font=customtkinter.CTkFont(size=20, weight="bold"))
+                                                      font=customtkinter.CTkFont(size=30, weight="bold"))
             self.login_label.grid(row=0, column=0, padx=600, pady=(150, 15))
-            self.username_entry = customtkinter.CTkEntry(self.login_frame, width=200, placeholder_text="Логин")
+            self.username_entry = customtkinter.CTkEntry(self.login_frame, width=200, placeholder_text="Логин",)
             self.username_entry.grid(row=1, column=0, padx=30, pady=(15, 15))
             self.password_entry = customtkinter.CTkEntry(self.login_frame, width=200, show="*", placeholder_text="Пароль")
             self.password_entry.grid(row=2, column=0, padx=30, pady=(0, 15))
             self.login_button = customtkinter.CTkButton(self.login_frame, text="Войти", command=self.main, width=200)
             self.login_button.grid(row=3, column=0, padx=30, pady=(15, 15))
         else:
+            self.login_frame = customtkinter.CTkFrame(self, width=2000, height=2000)
+            self.login_label = customtkinter.CTkLabel(self.login_frame, text="Регистрация/Вход",
+                                                      font=customtkinter.CTkFont(size=30, weight="bold"))
             self.main()
         p.close()
 
@@ -66,7 +69,7 @@ class App(customtkinter.CTk):
             self.home_frame.grid(row=0, column=1, sticky="nsew")
         else:
             self.home_frame.grid_forget()
-        if name == fram1_name:
+        if name == fram2_name:
             self.second_frame.grid(row=0, column=1, sticky="nsew")
         else:
             self.second_frame.grid_forget()
@@ -77,11 +80,12 @@ class App(customtkinter.CTk):
     def main(self):
         if self.login_event():
             return
+        self.login_label.destroy()
+        self.login_frame.destroy()
         self.after(0, lambda: self.state('zoomed'))
         # установиливаю макет сетки 1x2
         self.grid_rowconfigure(0, weight=1)
         self.grid_columnconfigure(1, weight=1)
-
         # Навигация
         self.navigation_frame = customtkinter.CTkFrame(self, corner_radius=0)
         self.navigation_frame.grid(row=0, column=0, sticky="nsew")
@@ -107,7 +111,6 @@ class App(customtkinter.CTk):
                                                       anchor="w",
                                                       command=self.frame_2_button_event)
         self.frame_2_button.grid(row=2, column=0, sticky="ew")
-
         # 3 фрейм
         self.frame_3_button = customtkinter.CTkButton(self.navigation_frame, corner_radius=0, height=40,
                                                       border_spacing=10, text=fram2_name,
@@ -133,14 +136,24 @@ class App(customtkinter.CTk):
         # создаем фрейм
         self.second_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
 
+        # Настройка
+
+        self.navigation_frame2_label = customtkinter.CTkLabel(self.second_frame,
+                                                              text=login,
+                                                              font=customtkinter.CTkFont(size=30, weight="bold"))
+        self.navigation_frame2_label.grid(padx=200, pady=100)
         # создаем фрейм
         self.third_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
 
         # Настройка
-        self.navigation_frame_label = customtkinter.CTkLabel(self.third_frame, text="  Image Example")
-        self.navigation_frame_label.grid()
+
+        self.navigation_frame_label = customtkinter.CTkLabel(self.third_frame, text="В Ведите название достопремечательности и через / описание",
+                                                             font=customtkinter.CTkFont(size=30, weight="bold"))
+        self.navigation_frame_label.grid(padx=200,pady=100)
         self.home_frame_frame_2_entry = customtkinter.CTkEntry(self.third_frame, width=1000, height=50)
-        self.home_frame_frame_2_entry.grid(row=1, column=0, padx=20, pady=10, sticky="nsw")
+        self.home_frame_frame_2_entry.grid(row=1, column=0, padx=200, pady=10, sticky="nsw")
+        self.bitin_2frame = customtkinter.CTkButton(self.third_frame, text='Отправить на проверку', height=50)
+        self.bitin_2frame.grid(row=2, column=0, padx=200, pady=10)
 
         # Главный фрейм
         self.select_frame_by_name(framgl_name)
