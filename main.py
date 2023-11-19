@@ -35,16 +35,16 @@ class App(customtkinter.CTk):
         if p.read() == '':
             # Создание окна
             self.title("image_example.py")
-            self.after(0, lambda: self.state('zoomed'))
             self.grid_rowconfigure(0, weight=1)
             self.grid_columnconfigure(0, weight=1)
+            self.after(0, lambda: self.state('zoomed'))
 
             # создаём логин фрейм
-            self.login_frame = customtkinter.CTkFrame(self, corner_radius=0)
-            self.login_frame.grid(row=0, column=0)
+            self.login_frame = customtkinter.CTkFrame(self, width=2000, height=2000)
+            self.login_frame.grid(row=0, column=0, padx=20, pady=20, sticky="nsew")
             self.login_label = customtkinter.CTkLabel(self.login_frame, text="Регистрация/Вход",
                                                       font=customtkinter.CTkFont(size=20, weight="bold"))
-            self.login_label.grid(row=0, column=0, padx=30, pady=(150, 15))
+            self.login_label.grid(row=0, column=0, padx=600, pady=(150, 15))
             self.username_entry = customtkinter.CTkEntry(self.login_frame, width=200, placeholder_text="Логин")
             self.username_entry.grid(row=1, column=0, padx=30, pady=(15, 15))
             self.password_entry = customtkinter.CTkEntry(self.login_frame, width=200, show="*", placeholder_text="Пароль")
@@ -144,9 +144,10 @@ class App(customtkinter.CTk):
 
         # Главный фрейм
         self.select_frame_by_name(framgl_name)
-    def home_button_event(self):self.select_frame_by_name(framgl_name)
-    def frame_2_button_event(self):self.select_frame_by_name(fram1_name)
-    def frame_3_button_event(self):self.select_frame_by_name(fram2_name)
+    def home_button_event(self):self.select_frame_by_name(framgl_name)# закончено
+    def frame_2_button_event(self):self.select_frame_by_name(fram1_name)# закончено
+    def frame_3_button_event(self):self.select_frame_by_name(fram2_name)# закончено
+    # закончено change_appearance_mode_event
     def change_appearance_mode_event(self, new_appearance_mode):
         if new_appearance_mode == 'Светлая':
             customtkinter.set_appearance_mode("light")
@@ -154,11 +155,15 @@ class App(customtkinter.CTk):
             customtkinter.set_appearance_mode("dark")
         else:
             customtkinter.set_appearance_mode("system")
+    # закончено avtor
     def avtor(self, password, file):
+        if password == '':
+            return 1
+        if login == '':
+            return 1
         for file3 in open('Авторизация', 'r', encoding="UTF-8"):
             if file3[2:file3.find('\t', 2)] == login:
                 if file3[file3.find('\t', 2) + 1:file3.find('\t', file3.find('\t', 2) + 1)] == password:
-                    print('Вы вошли')
                     self.login_label1 = customtkinter.CTkLabel(self.login_frame, text="Вы вошли",font=customtkinter.CTkFont(size=20, weight="bold"))
                     self.login_label1.grid(row=4, column=0)
                     p = open('Логин', 'w', encoding="UTF-8")
@@ -179,7 +184,8 @@ class App(customtkinter.CTk):
         p.write(login)
         self.login_label1.grid_forget()
         p.close()
-        return 0
+        return 0 #акон №#
+    # закончено login_event
     def login_event(self):
         global g,login
         p = open('Логин', 'r', encoding="UTF-8")
