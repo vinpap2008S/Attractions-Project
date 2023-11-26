@@ -26,9 +26,7 @@ class App(customtkinter.CTk):
     def __init__(self):
         super().__init__()
         screen_width = self.winfo_screenwidth()
-        screen_height = self.winfo_screenheight()
-        # Загрузка изображений
-        image_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "test_images")  # Изображение поиск
+        image_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "test_images")
         self.logo_image = customtkinter.CTkImage(Image.open(os.path.join(image_path, "CustomTkinter_logo_single.png")),
             size=(26, 26))
         self.home_image = customtkinter.CTkImage(light_image=Image.open(os.path.join(image_path, "home_dark.png")),
@@ -47,12 +45,10 @@ class App(customtkinter.CTk):
             font=customtkinter.CTkFont(size=30, weight="bold"))
         self.title("Богадство мира")
         if p.read() == '':
-            # Создание окна
             self.grid_rowconfigure(0, weight=1)
             self.grid_columnconfigure(1, weight=1)
             self.after(0, lambda: self.state('zoomed'))
 
-            # создаём логин фрейм
             self.login_frame.grid(row=0, column=0, padx=20, pady=20, sticky="nsew")
             self.login_label.grid(row=0, column=0, padx=screen_width//2 - 160, pady=(150, 15))
             self.username_entry = customtkinter.CTkEntry(self.login_frame, width=200, placeholder_text="Логин",)
@@ -95,9 +91,10 @@ class App(customtkinter.CTk):
         self.navigation_frame = customtkinter.CTkFrame(self, corner_radius=0)
         self.navigation_frame.grid(row=0, column=0, sticky="nsew")
         self.navigation_frame.grid_rowconfigure(4, weight=1)
-        self.navigation_frame_label = customtkinter.CTkLabel(self.navigation_frame, text="  Image Example",
-                image=self.logo_image,
-                compound="left",
+        self.navigation_frame_label = customtkinter.CTkLabel(
+                self.navigation_frame,
+                text="  Image Example",
+                image=self.logo_image, compound="left",
                 font=customtkinter.CTkFont(size=15, weight="bold"))
         self.navigation_frame_label.grid(row=0, column=0, padx=20, pady=20)
         # 1 фрейм
