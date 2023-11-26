@@ -17,10 +17,6 @@ class App(customtkinter.CTk):
         image_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "test_images")  # Изображение поиск
         self.logo_image = customtkinter.CTkImage(Image.open(os.path.join(image_path, "CustomTkinter_logo_single.png")),
                                                  size=(26, 26))
-        self.large_test_image = customtkinter.CTkImage(Image.open(os.path.join(image_path, "large_test_image.png")),
-                                                       size=(500, 150))
-        self.image_icon_image = customtkinter.CTkImage(Image.open(os.path.join(image_path, "image_icon_light.png")),
-                                                       size=(20, 20))
         self.home_image = customtkinter.CTkImage(light_image=Image.open(os.path.join(image_path, "home_dark.png")),
                                                  dark_image=Image.open(os.path.join(image_path, "home_light.png")),
                                                  size=(20, 20))
@@ -31,7 +27,7 @@ class App(customtkinter.CTk):
             light_image=Image.open(os.path.join(image_path, "add_user_dark.png")),
             dark_image=Image.open(os.path.join(image_path, "add_user_light.png")), size=(20, 20))
 
-        p = open('Логин', 'r', encoding="UTF-8")
+        p = open('file(sgl)/Логин', 'r', encoding="UTF-8")
         if p.read() == '':
             # Создание окна
             self.title("image_example.py")
@@ -57,7 +53,6 @@ class App(customtkinter.CTk):
                                                       font=customtkinter.CTkFont(size=30, weight="bold"))
             self.main()
         p.close()
-
     def select_frame_by_name(self, name):
         # Цвет кнопки от выбора
         self.home_button.configure(fg_color=("gray75", "gray25") if name == framgl_name else "transparent")
@@ -129,9 +124,6 @@ class App(customtkinter.CTk):
         self.home_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
         self.home_frame.grid_columnconfigure(0, weight=1)
 
-        self.home_frame_large_image_label = customtkinter.CTkLabel(self.home_frame, text="",
-                                                                   image=self.large_test_image)
-        self.home_frame_large_image_label.grid(row=0, column=0, padx=20, pady=10)
 
         # создаем фрейм
         self.second_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
@@ -178,12 +170,12 @@ class App(customtkinter.CTk):
             return 1
         if login == '':
             return 1
-        for file3 in open('Авторизация', 'r', encoding="UTF-8"):
+        for file3 in open('file(sgl)/Авторизация', 'r', encoding="UTF-8"):
             if file3[2:file3.find('\t', 2)] == login:
                 if file3[file3.find('\t', 2) + 1:file3.find('\t', file3.find('\t', 2) + 1)] == password:
                     self.login_label1 = customtkinter.CTkLabel(self.login_frame, text="Вы вошли",font=customtkinter.CTkFont(size=20, weight="bold"))
                     self.login_label1.grid(row=4, column=0)
-                    p = open('Логин', 'w', encoding="UTF-8")
+                    p = open('file(sgl)/Логин', 'w', encoding="UTF-8")
                     p.write(login)
                     p.close()
                     self.login_frame.grid_forget()  # remove login frame
@@ -197,7 +189,7 @@ class App(customtkinter.CTk):
                     return 1
         file.write(str(int(g) + 1) + '\t' + login + '\t' + password + '\t' + 'f' + '\n')
         file.close()
-        p = open('Логин', 'w', encoding="UTF-8")
+        p = open('file(sgl)/Логин', 'w', encoding="UTF-8")
         p.write(login)
         self.login_label1.grid_forget()
         p.close()
@@ -205,7 +197,7 @@ class App(customtkinter.CTk):
     # закончено login_event
     def login_event(self):
         global g,login
-        p = open('Логин', 'r', encoding="UTF-8")
+        p = open('file(sgl)/Логин', 'r', encoding="UTF-8")
         if p.read() == '':
 
             self.login_label1 = customtkinter.CTkLabel(self.login_frame, text="",
@@ -215,20 +207,19 @@ class App(customtkinter.CTk):
             login = self.username_entry.get()
             password = self.password_entry.get()
 
-            file = open('Авторизация', 'a', encoding="UTF-8")
+            file = open('file(sgl)/Авторизация', 'a', encoding="UTF-8")
             g = 0
-            for nine in open('Авторизация', 'r', encoding="UTF-8"):
+            for nine in open('file(sgl)/Авторизация', 'r', encoding="UTF-8"):
                 g = nine[0]
             if g == 'Л':
                 g = 0
             p.close()
             return self.avtor(password,file)
         else:
-            p = open('Логин', 'r', encoding="UTF-8")
+            p = open('file(sgl)/Логин', 'r', encoding="UTF-8")
             login = p.read()
             p.close()
             return 0
-
 
 if __name__ == "__main__":
     app = App()
