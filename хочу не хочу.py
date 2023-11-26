@@ -1,46 +1,17 @@
-def strmas(mas):
-    d = ''
-    for i in range(len(mas)):
-        d = d + str(mas[i]) + ' '
-    return d
+import customtkinter
+app = customtkinter.CTk()
+app.grid_rowconfigure(0, weight=1)
+app.grid_columnconfigure(0, weight=1)
 
+# create scrollable textbox
+tk_textbox = customtkinter.CTkTextbox(app, activate_scrollbars=False)
+tk_textbox.grid(row=0, column=0, sticky="nsew")
 
-n = open('negat', 'r')
-p = open('pol', 'r')
-pol = p.read()
-neg = n.read()
-polo = 0
-Truemas = []
-Falsemas = []
-for i in range(len(pol)):
-    if pol[i] == ' ':
-        Truemas.append(polo)
-        polo = 0
-    else:
-        polo = polo * 10 + int(pol[i])
-if polo != 0:
-    Truemas.append(polo)
-polo = 0
-for i in range(len(neg)):
-    if neg[i] == ' ':
-        Falsemas.append(polo)
-        polo = 0
-    else:
-        polo = polo * 10 + int(neg[i])
-if polo != 0:
-    Falsemas.append(polo)
-n.close()
-p.close()
+# create CTk scrollbar
+ctk_textbox_scrollbar = customtkinter.CTkScrollbar(app, command=tk_textbox.yview)
+ctk_textbox_scrollbar.grid(row=0, column=1, sticky="ns")
 
-p = 1111111
-n = 1111111
-f = open('negat', 'w')
-t = open('pol', 'w')
-Falsemas.append(n)
-Truemas.append(p)
+# connect textbox scroll event to CTk scrollbar
+tk_textbox.configure(yscrollcommand=ctk_textbox_scrollbar.set)
 
-f.write(strmas(Falsemas))
-t.write(strmas(Truemas))
-
-f.close()
-t.close()
+app.mainloop()
