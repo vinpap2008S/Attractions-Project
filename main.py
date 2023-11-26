@@ -1,8 +1,11 @@
 #pip3 install -r requirements.txt
-import customtkinter
+from PIL import Image
 import os
 import sqlite3
-from PIL import Image
+
+import customtkinter
+
+
 from globall import *
 from skllite import *
 
@@ -51,7 +54,7 @@ class App(customtkinter.CTk):
 
             # создаём логин фрейм
             self.login_frame.grid(row=0, column=0, padx=20, pady=20, sticky="nsew")
-            self.login_label.grid(row=0, column=0, padx=screen_width//2 - 125, pady=(150, 15))
+            self.login_label.grid(row=0, column=0, padx=screen_width//2 - 160, pady=(150, 15))
             self.username_entry = customtkinter.CTkEntry(self.login_frame, width=200, placeholder_text="Логин",)
             self.username_entry.grid(row=1, column=0, padx=30, pady=(15, 15))
             self.password_entry = customtkinter.CTkEntry(self.login_frame, width=200, show="*", placeholder_text="Пароль")
