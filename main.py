@@ -17,11 +17,13 @@ c.execute('''
         array2 TEXT
     )
 ''')
+customtkinter.set_appearance_mode("light")
 customtkinter.set_default_color_theme("dark-blue")
 class App(customtkinter.CTk):
     def __init__(self):
         super().__init__()
-
+        screen_width = self.winfo_screenwidth()
+        screen_height = self.winfo_screenheight()
         # Загрузка изображений
         image_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "test_images")  # Изображение поиск
         self.logo_image = customtkinter.CTkImage(Image.open(os.path.join(image_path, "CustomTkinter_logo_single.png")),
@@ -50,7 +52,7 @@ class App(customtkinter.CTk):
 
             # создаём логин фрейм
             self.login_frame.grid(row=0, column=0, padx=20, pady=20, sticky="nsew")
-            self.login_label.grid(row=0, column=0, padx=300, pady=(150, 15))
+            self.login_label.grid(row=0, column=0, padx=screen_width//2 - 125, pady=(150, 15))
             self.username_entry = customtkinter.CTkEntry(self.login_frame, width=200, placeholder_text="Логин",)
             self.username_entry.grid(row=1, column=0, padx=30, pady=(15, 15))
             self.password_entry = customtkinter.CTkEntry(self.login_frame, width=200, show="*", placeholder_text="Пароль")
@@ -224,7 +226,5 @@ class App(customtkinter.CTk):
 
 if __name__ == "__main__":
     app = App()
-    screen_width = app.winfo_screenwidth()
-    screen_height = app.winfo_screenheight()
     app.mainloop()
     conn.close()
