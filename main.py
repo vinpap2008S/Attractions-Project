@@ -1,4 +1,4 @@
-#pip install -r requirements.txt
+#pip3 install -r requirements.txt
 import customtkinter
 import os
 from PIL import Image
@@ -144,16 +144,20 @@ class App(customtkinter.CTk):
         self.navigation_frame2_label.grid(padx=200, pady=100)
         # создаем фрейм
         self.third_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
-
-        # Настройка
-
-        self.navigation_frame_label = customtkinter.CTkLabel(self.third_frame, text="В Ведите название достопремечательности и через / описание",
+        self.navigation_frame_label = customtkinter.CTkLabel(self.third_frame,
+                                                             text="В ведите название достопремечательности и через / описание",
                                                              font=customtkinter.CTkFont(size=30, weight="bold"))
-        self.navigation_frame_label.grid(padx=200,pady=100)
+        # Настройка
+        self.navigation_frame_label.grid(padx=200, pady=100)
         self.home_frame_frame_2_entry = customtkinter.CTkEntry(self.third_frame, width=1000, height=50)
         self.home_frame_frame_2_entry.grid(row=1, column=0, padx=200, pady=10, sticky="nsw")
         self.bitin_2frame = customtkinter.CTkButton(self.third_frame, text='Отправить на проверку', height=50)
         self.bitin_2frame.grid(row=2, column=0, padx=200, pady=10)
+        # навигация
+
+
+        # создаём фрейм
+
 
         # Главный фрейм
         self.select_frame_by_name(framgl_name)
