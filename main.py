@@ -80,6 +80,8 @@ class App(customtkinter.CTk):
         if name == FRAM1_NAME else "transparent")
         self.frame_3_button.configure(fg_color=("gray75", "gray25")
         if name == FRAM2_NAME else "transparent")
+        self.frame_4_button.configure(fg_color=("gray75", "gray25")
+        if name == FRAM3_NAME else "transparent")
         # Показ выбранного
         if name == FRAMGL_NAME:
             self.home_frame.grid(row=0, column=1, sticky="nsew")
@@ -93,6 +95,10 @@ class App(customtkinter.CTk):
             self.third_frame.grid(row=0, column=1, sticky="nsew")
         else:
             self.third_frame.grid_forget()
+        if name == FRAM3_NAME:
+            self.negative_frame.grid(row=0, column=1, sticky="nsew")
+        else:
+            self.negative_frame.grid_forget()
     def main(self):
         if self.login_event():
             return
@@ -105,7 +111,7 @@ class App(customtkinter.CTk):
         # Навигация
         self.navigation_frame = customtkinter.CTkFrame(self, corner_radius=0)
         self.navigation_frame.grid(row=0, column=0, sticky="nsew")
-        self.navigation_frame.grid_rowconfigure(4, weight=1)
+        self.navigation_frame.grid_rowconfigure(6, weight=1)
         self.navigation_frame_label = customtkinter.CTkLabel(
                 self.navigation_frame,
                 text="  Image Example",
@@ -140,6 +146,15 @@ class App(customtkinter.CTk):
                 image=self.add_user_image, anchor="w",
                 command=self.frame_3_button_event)
         self.frame_3_button.grid(row=3, column=0, sticky="ew")
+        # 4 фрейм
+        self.frame_4_button = customtkinter.CTkButton(
+            self.navigation_frame, corner_radius=0, height=40,
+            border_spacing=10, text=FRAM3_NAME,
+            fg_color="transparent", text_color=("gray10", "gray90"),
+            hover_color=("gray70", "gray30"),
+            image=self.add_user_image, anchor="w",
+            command=self.frame_4_button_event)
+        self.frame_4_button.grid(row=4, column=0, sticky="ew")
         # выбор темы
         self.appearance_mode_menu = customtkinter.CTkOptionMenu(
                 self.navigation_frame,
@@ -154,7 +169,7 @@ class App(customtkinter.CTk):
         self.home_frame.grid_columnconfigure(0, weight=1)
 
 
-        # создаем фрейм
+        # создаем 3 фрейм
         self.second_frame = customtkinter.CTkFrame(self, corner_radius=0,
             fg_color="transparent")
         # Настройка
@@ -163,13 +178,16 @@ class App(customtkinter.CTk):
                 text=LOGIN,
                 font=customtkinter.CTkFont(size=30, weight="bold"))
         self.navigation_frame2_label.grid(padx=200, pady=100)
-        # создаем фрейм
+        # создаем 2 фрейм
         self.third_frame = customtkinter.CTkFrame(self, corner_radius=0,
             fg_color="transparent")
+        # создаём 4 фрейм
+        self.negative_frame = customtkinter.CTkFrame(self, corner_radius=0,
+                                                   fg_color="transparent")
+        # Настройка
         self.navigation_frame_label = customtkinter.CTkLabel(self.third_frame,
             text="Введите название достопремечательности и через / описание",
                 font=customtkinter.CTkFont(size=30, weight="bold"))
-        # Настройка
         self.navigation_frame_label.grid(padx=200, pady=100)
         self.home_frame_frame_2_entry = customtkinter.CTkEntry(
             self.third_frame, width=1000, height=50)
@@ -183,6 +201,7 @@ class App(customtkinter.CTk):
     def home_button_event(self):self.select_frame_by_name(FRAMGL_NAME)
     def frame_2_button_event(self):self.select_frame_by_name(FRAM1_NAME)
     def frame_3_button_event(self):self.select_frame_by_name(FRAM2_NAME)
+    def frame_4_button_event(self):self.select_frame_by_name(FRAM3_NAME)
     def change_appearance_mode_event(self, new_appearance_mode):
         if new_appearance_mode == 'Светлая':
             customtkinter.set_appearance_mode("light")
@@ -224,10 +243,12 @@ class App(customtkinter.CTk):
             , text="",
              font=customtkinter.CTkFont(size=20, weight="bold"))
         self.login_label1.grid(row=4, column=0)
-
-        LOGIN = self.username_entry.get()
-        password = self.password_entry.get()
-
+        p = open('file(sgl)/Логин', 'r', encoding="UTF-8")
+        if p.read() == '':
+            LOGIN = self.username_entry.get()
+            password = self.password_entry.get()
+        else:
+            return 0
         file = open('file(sgl)/Авторизация', 'a', encoding="UTF-8")
         g = 0
         for nine in open('file(sgl)/Авторизация', 'r', encoding="UTF-8"):
