@@ -5,6 +5,7 @@ import sqlite3
 from PIL import Image
 from globall import *
 from skllite import *
+
 conn = sqlite3.connect('database.db')
 c = conn.cursor()
 c.execute('''
@@ -20,11 +21,6 @@ customtkinter.set_default_color_theme("dark-blue")
 class App(customtkinter.CTk):
     def __init__(self):
         super().__init__()
-        global FRAMGL_NAME, FRAM1_NAME, FRAM2_NAME, FRAM3_NAME,login_frame,login_label
-        FRAMGL_NAME = "Главная"
-        FRAM1_NAME = "Добавление обьектов"
-        FRAM2_NAME = "Профиль"
-        FRAM3_NAME = ""
 
         # Загрузка изображений
         image_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "test_images")  # Изображение поиск
@@ -41,19 +37,20 @@ class App(customtkinter.CTk):
             dark_image=Image.open(os.path.join(image_path, "add_user_light.png")), size=(20, 20))
 
         p = open('file(sgl)/Логин', 'r', encoding="UTF-8")
-        self.login_frame = customtkinter.CTkFrame(self, width=2000, height=2000)
+        self.login_frame = customtkinter.CTkFrame(self)
         self.login_label = customtkinter.CTkLabel(self.login_frame, text="Регистрация/Вход",
                                                   font=customtkinter.CTkFont(size=30, weight="bold"))
+        self.title("Богадство мира")
         if p.read() == '':
             # Создание окна
-            self.title("image_example.py")
+
             self.grid_rowconfigure(0, weight=1)
             self.grid_columnconfigure(1, weight=1)
             self.after(0, lambda: self.state('zoomed'))
 
             # создаём логин фрейм
             self.login_frame.grid(row=0, column=0, padx=20, pady=20, sticky="nsew")
-            self.login_label.grid(row=0, column=0, padx=600, pady=(150, 15))
+            self.login_label.grid(row=0, column=0, padx=300, pady=(150, 15))
             self.username_entry = customtkinter.CTkEntry(self.login_frame, width=200, placeholder_text="Логин",)
             self.username_entry.grid(row=1, column=0, padx=30, pady=(15, 15))
             self.password_entry = customtkinter.CTkEntry(self.login_frame, width=200, show="*", placeholder_text="Пароль")
@@ -143,7 +140,7 @@ class App(customtkinter.CTk):
         # создаем фрейм
         self.third_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
         self.navigation_frame_label = customtkinter.CTkLabel(self.third_frame,
-                                                             text="В ведите название достопремечательности и через / описание",
+                                                             text="Введите название достопремечательности и через / описание",
                                                              font=customtkinter.CTkFont(size=30, weight="bold"))
         # Настройка
         self.navigation_frame_label.grid(padx=200, pady=100)
@@ -227,5 +224,7 @@ class App(customtkinter.CTk):
 
 if __name__ == "__main__":
     app = App()
+    screen_width = app.winfo_screenwidth()
+    screen_height = app.winfo_screenheight()
     app.mainloop()
     conn.close()
