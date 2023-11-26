@@ -171,9 +171,12 @@ class App(customtkinter.CTk):
                 font=customtkinter.CTkFont(size=30, weight="bold"))
         # Настройка
         self.navigation_frame_label.grid(padx=200, pady=100)
-        self.home_frame_frame_2_entry = customtkinter.CTkEntry(self.third_frame, width=1000, height=50)
-        self.home_frame_frame_2_entry.grid(row=1, column=0, padx=200, pady=10, sticky="nsw")
-        self.bitin_2frame = customtkinter.CTkButton(self.third_frame, text='Отправить на проверку', height=50)
+        self.home_frame_frame_2_entry = customtkinter.CTkEntry(
+            self.third_frame, width=1000, height=50)
+        self.home_frame_frame_2_entry.grid(row=1, column=0,
+                                    padx=200, pady=10, sticky="nsw")
+        self.bitin_2frame = customtkinter.CTkButton(self.third_frame
+            , text='Отправить на проверку', height=50)
         self.bitin_2frame.grid(row=2, column=0, padx=200, pady=10)
         # Главный фрейм
         self.select_frame_by_name(FRAMGL_NAME)
@@ -187,6 +190,7 @@ class App(customtkinter.CTk):
             customtkinter.set_appearance_mode("dark")
         else:
             customtkinter.set_appearance_mode("system")
+    # не трож убьёт
     def avtor(self, password, file):
         if password == '':
             return 1
@@ -216,29 +220,22 @@ class App(customtkinter.CTk):
         return 0
     def login_event(self):
         global g,LOGIN
-        p = open('file(sgl)/Логин', 'r', encoding="UTF-8")
-        if p.read() == '':
+        self.login_label1 = customtkinter.CTkLabel(self.login_frame
+            , text="",
+             font=customtkinter.CTkFont(size=20, weight="bold"))
+        self.login_label1.grid(row=4, column=0)
 
-            self.login_label1 = customtkinter.CTkLabel(self.login_frame, text="",
-                 font=customtkinter.CTkFont(size=20, weight="bold"))
-            self.login_label1.grid(row=4, column=0)
+        LOGIN = self.username_entry.get()
+        password = self.password_entry.get()
 
-            LOGIN = self.username_entry.get()
-            password = self.password_entry.get()
-
-            file = open('file(sgl)/Авторизация', 'a', encoding="UTF-8")
+        file = open('file(sgl)/Авторизация', 'a', encoding="UTF-8")
+        g = 0
+        for nine in open('file(sgl)/Авторизация', 'r', encoding="UTF-8"):
+            g = nine[0]
+        if g == 'Л':
             g = 0
-            for nine in open('file(sgl)/Авторизация', 'r', encoding="UTF-8"):
-                g = nine[0]
-            if g == 'Л':
-                g = 0
-            p.close()
-            return self.avtor(password,file)
-        else:
-            p = open('file(sgl)/Логин', 'r', encoding="UTF-8")
-            LOGIN = p.read()
-            p.close()
-            return 0
+        p.close()
+        return self.avtor(password,file)
 
 if __name__ == "__main__":
     app = App()
