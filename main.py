@@ -45,7 +45,6 @@ class App(customtkinter.CTk):
         self.title("Богадство мира")
         if p.read() == '':
             # Создание окна
-
             self.grid_rowconfigure(0, weight=1)
             self.grid_columnconfigure(1, weight=1)
             self.after(0, lambda: self.state('zoomed'))
@@ -152,10 +151,9 @@ class App(customtkinter.CTk):
         self.bitin_2frame.grid(row=2, column=0, padx=200, pady=10)
         # Главный фрейм
         self.select_frame_by_name(FRAMGL_NAME)
-    def home_button_event(self):self.select_frame_by_name(FRAMGL_NAME)# закончено
-    def frame_2_button_event(self):self.select_frame_by_name(FRAM1_NAME)# закончено
-    def frame_3_button_event(self):self.select_frame_by_name(FRAM2_NAME)# закончено
-    # закончено change_appearance_mode_event
+    def home_button_event(self):self.select_frame_by_name(FRAMGL_NAME)
+    def frame_2_button_event(self):self.select_frame_by_name(FRAM1_NAME)
+    def frame_3_button_event(self):self.select_frame_by_name(FRAM2_NAME)
     def change_appearance_mode_event(self, new_appearance_mode):
         if new_appearance_mode == 'Светлая':
             customtkinter.set_appearance_mode("light")
@@ -163,7 +161,6 @@ class App(customtkinter.CTk):
             customtkinter.set_appearance_mode("dark")
         else:
             customtkinter.set_appearance_mode("system")
-    # закончено avtor
     def avtor(self, password, file):
         if password == '':
             return 1
@@ -191,7 +188,6 @@ class App(customtkinter.CTk):
         self.login_label1.grid_forget()
         p.close()
         return 0
-    # закончено login_event
     def login_event(self):
         global g,LOGIN
         p = open('file(sgl)/Логин', 'r', encoding="UTF-8")
