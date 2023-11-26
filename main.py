@@ -82,6 +82,8 @@ class App(customtkinter.CTk):
         if name == FRAM2_NAME else "transparent")
         self.frame_4_button.configure(fg_color=("gray75", "gray25")
         if name == FRAM3_NAME else "transparent")
+        self.frame_5_button.configure(fg_color=("gray75", "gray25")
+        if name == FRAM4_NAME else "transparent")
         # Показ выбранного
         if name == FRAMGL_NAME:
             self.home_frame.grid(row=0, column=1, sticky="nsew")
@@ -99,6 +101,10 @@ class App(customtkinter.CTk):
             self.negative_frame.grid(row=0, column=1, sticky="nsew")
         else:
             self.negative_frame.grid_forget()
+        if name == FRAM4_NAME:
+            self.pozitive_frame.grid(row=0, column=1, sticky="nsew")
+        else:
+            self.pozitive_frame.grid_forget()
     def main(self):
         if self.login_event():
             return
@@ -155,6 +161,15 @@ class App(customtkinter.CTk):
             image=self.add_user_image, anchor="w",
             command=self.frame_4_button_event)
         self.frame_4_button.grid(row=4, column=0, sticky="ew")
+        # 5 фрейм
+        self.frame_5_button = customtkinter.CTkButton(
+            self.navigation_frame, corner_radius=0, height=40,
+            border_spacing=10, text=FRAM4_NAME,
+            fg_color="transparent", text_color=("gray10", "gray90"),
+            hover_color=("gray70", "gray30"),
+            image=self.add_user_image, anchor="w",
+            command=self.frame_5_button_event)
+        self.frame_5_button.grid(row=5, column=0, sticky="ew")
         # выбор темы
         self.appearance_mode_menu = customtkinter.CTkOptionMenu(
                 self.navigation_frame,
@@ -184,6 +199,9 @@ class App(customtkinter.CTk):
         # создаём 4 фрейм
         self.negative_frame = customtkinter.CTkFrame(self, corner_radius=0,
                                                    fg_color="transparent")
+        # создаём 5 фрейм
+        self.pozitive_frame = customtkinter.CTkFrame(self, corner_radius=0,
+                                                     fg_color="transparent")
         # Настройка
         self.navigation_frame_label = customtkinter.CTkLabel(self.third_frame,
             text="Введите название достопремечательности и через / описание",
@@ -202,6 +220,7 @@ class App(customtkinter.CTk):
     def frame_2_button_event(self):self.select_frame_by_name(FRAM1_NAME)
     def frame_3_button_event(self):self.select_frame_by_name(FRAM2_NAME)
     def frame_4_button_event(self):self.select_frame_by_name(FRAM3_NAME)
+    def frame_5_button_event(self):self.select_frame_by_name(FRAM4_NAME)
     def change_appearance_mode_event(self, new_appearance_mode):
         if new_appearance_mode == 'Светлая':
             customtkinter.set_appearance_mode("light")
