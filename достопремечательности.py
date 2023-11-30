@@ -1,79 +1,34 @@
-file = open('Данные', 'a', encoding="UTF-8")
-g = 0
-for nine in open('Данные', 'r', encoding="UTF-8"):
-    g = nine[0]
-if g == 'Н':
-    g = 0
+import sqlite3
 
-naz = input("Название достопремечательности ")
-opisan = input("Название описание ")
-naz.lower()
-nazvan = naz
-opisan.lower()
-vowels = "бвгджзйклмнпрстфхцчшщъь"
-for letter in naz:
-    if letter in vowels:
-        naz = naz.replace(letter, "@")
-vowels = "аеёиоуыэюя"
-for letter in naz:
-    if letter in vowels:
-        naz = naz.replace(letter, "№")
+# Создаем подключение к базе данных или открываем существующую
+conn = sqlite3.connect('cities.db')
 
+# Создаем таблицу, если она не существует
+conn.execute('''CREATE TABLE IF NOT EXISTS cities
+             (id INTEGER PRIMARY KEY AUTOINCREMENT,
+             name TEXT NOT NULL,
+             description TEXT NOT NULL);''')
 
-while naz.count('\t') or opisan.count('\t') or '@@@' in naz or '№№№' in naz:
-    if naz.count('\t'):
-        naz = input("Название достопремечательности без таба ")
-        naz.lower()
-        nazvan = naz
-        opisan.lower()
-        vowels = "бвгджзйклмнпрстфхцчшщъь"
-        for letter in naz:
-            if letter in vowels:
-                naz = naz.replace(letter, "@")
-        vowels = "аеёиоуыэюя"
-        for letter in naz:
-            if letter in vowels:
-                naz = naz.replace(letter, "№")
-    elif opisan.count('\t'):
-        opisan = input("Название описание без таба ")
-    elif '@@@' in naz:
-        print("Название достопремечательности правильное")
-        naz = input()
-        naz.lower()
-        nazvan = naz
-        opisan.lower()
-        vowels = "бвгджзйклмнпрстфхцчшщъь"
-        for letter in naz:
-            if letter in vowels:
-                naz = naz.replace(letter, "@")
-        vowels = "аеёиоуыэюя"
-        for letter in naz:
-            if letter in vowels:
-                naz = naz.replace(letter, "№")
-    elif '№№№' in naz:
-        print("Название достопремечательности правильное")
-        naz = input()
-        naz.lower()
-        nazvan = naz
-        opisan.lower()
-        vowels = "бвгджзйклмнпрстфхцчшщъь"
-        for letter in naz:
-            if letter in vowels:
-                naz = naz.replace(letter, "@")
-        vowels = "аеёиоуыэюя"
-        for letter in naz:
-            if letter in vowels:
-                naz = naz.replace(letter, "№")
+def add_city(name, description):
+    # Добавляем новый город в базу данных
+    conn.execute("INSERT INTO cities (name, description) VALUES (?, ?)", (name, description))
+    conn.commit()
+    print("Город успешно добавлен!")
 
-
-file.write(str(int(g) + 1) + '\t' + nazvan + '\t' + opisan + ' 1' + ' ' + '1'+'\n')
-
-file.close()
-l = 0
-for nine in open('Данные', 'r', encoding="UTF-8"):
-    if l == 0:
-        l = 1
+def get_city_info(name):
+    # Получаем информацию о городе по его названию
+    cursor = conn.execute("SELECT description FROM cities WHERE name=?", (name,))
+    city_info = cursor.fetchone()
+    if city_info:
+        print(f"Описание города {name}: {city_info[0]}")
     else:
-        print(nine[2:nine.find('\t', 2)], end=' ')
-        print(nine[nine.find('\t', 2)+1:-4], nine[-4], nine[-2])
-l = 0
+        print("Город не найден!")
+
+# Пример использования функций
+add_city("Москва", "Столица России")
+add_city("Санкт-Петербург", "Город на Неве")
+get_city_info("Москва")
+get_city_info("Санкт-Петербург")
+
+# Закрываем соединение с базой данных
+conn.close()
