@@ -12,5 +12,4 @@ for line in p.readlines():
             a.append(line[:-1])
 
 print(a)
-print(d)
 p.close()
