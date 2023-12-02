@@ -8,6 +8,8 @@ import customtkinter
 
 from globall import *
 from skllite import *
+from site import *
+from opisanie import *
 
 conn = sqlite3.connect('database.db')
 c = conn.cursor()
@@ -20,6 +22,16 @@ c.execute('''
         array2 TEXT
     )
 ''')
+site = sqlite3.connect('cities.db')
+site.execute('''CREATE TABLE IF NOT EXISTS cities
+             (id INTEGER PRIMARY KEY AUTOINCREMENT,
+             name TEXT NOT NULL);''')
+opisenie = sqlite3.connect('cities.db')
+opisenie.execute('''CREATE TABLE IF NOT EXISTS cities
+             (id INTEGER PRIMARY KEY AUTOINCREMENT,
+             name TEXT NOT NULL,
+             description TEXT NOT NULL,
+             location TEXT NOT NULL);''')
 customtkinter.set_appearance_mode("light")
 customtkinter.set_default_color_theme("dark-blue")
 class App(customtkinter.CTk):
