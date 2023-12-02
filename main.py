@@ -265,16 +265,20 @@ class App(CTk):
         self.home_None.grid(row=3, column=0)
 
         self.home_Lable_all = CTkLabel(self.home_frame,
-        text='Город         Название'
-             '              Описание        Уже был       '
-             'Не хочу быть',
+        text='Город            Название'
+             '              Описание                 Уже был       '
+             '             Не хочу быть',
             font=CTkFont(size=30, weight="bold"))
         self.home_Lable_all.grid(row=4, column=0)
 
-        tk_textbox = CTkScrollableFrame(self.home_frame)
+        tk_textbox = CTkScrollableFrame(self.home_frame,height=screen_height-250)
         tk_textbox.grid(row=5, column=0, sticky="nsew")
-        tk_textbox.configure(height=screen_height-250)
-
+        tk_textbox.grid_columnconfigure(0, weight=1)
+        tk_textbox.grid_columnconfigure(1, weight=1)
+        tk_textbox.grid_columnconfigure(2, weight=1)
+        tk_textbox.grid_columnconfigure(3, weight=1)
+        tk_textbox.grid_columnconfigure(4, weight=1)
+        self.home_masive_install(tk_textbox)
 
         # создаем 3 фрейм
         self.second_frame = CTkFrame(self, corner_radius=0,
@@ -313,7 +317,7 @@ class App(CTk):
     def frame_3_button_event(self):self.select_frame_by_name(FRAM2_NAME)
     def frame_4_button_event(self):self.select_frame_by_name(FRAM3_NAME)
     def frame_5_button_event(self):self.select_frame_by_name(FRAM4_NAME)
-    def home_masive_install(self):
+    def home_masive_install(self,sel):
         opisenie_cursor.execute("SELECT name, description, location FROM cities")
         rows = opisenie_cursor.fetchall()
         f = 0
@@ -323,11 +327,31 @@ class App(CTk):
         self.mas = [1,2,3,4,5]
         for i in range(f):
             self.home_masive.append(self.mas)
+            opisenie_cursor.execute('SELECT name,description,location FROM cities')
+            rows = opisenie_cursor.fetchall()
+            for row in rows:
+                self.home_masive[i][0] = CTkLabel(sel, text=row[0])
+                self.home_masive[i][1] = CTkLabel(sel, text=row[1])
+                self.home_masive[i][2] = CTkLabel(sel, text=row[2])
+                self.home_masive[i][3] = CTkButton(sel, text='Был')
+                self.home_masive[i][4] = CTkButton(sel, text='Не хочу')
+        self.home_masive_grid(f)
+    def home_masive_grid(self, f):
+        for i in range(f):
+            self.home_masive[i][0].grid(row=i, column=0)
+            self.home_masive[i][1].grid(row=i, column=1)
+            self.home_masive[i][2].grid(row=i, column=2)
+            self.home_masive[i][3].grid(row=i, column=3)
+            self.home_masive[i][4].grid(row=i, column=4)
+    def home_masive_delite(sel, self):
+        for i in range(f):
+            self.home_masive.append(self.mas)
             self.home_masive[i][0] = CTkLabel(self, text='dsfdfsdf')
             self.home_masive[i][1] = CTkLabel(self, text='dsfdfsdf')
             self.home_masive[i][2] = CTkLabel(self, text='dsfdfsdf')
             self.home_masive[i][3] = CTkButton(self, text='dsfdfsdf')
             self.home_masive[i][4] = CTkButton(self, text='dsfdfsdf')
+
     @staticmethod
     def change_appearance_mode_event(new_appearance_mode):
         if new_appearance_mode == 'Светлая':
