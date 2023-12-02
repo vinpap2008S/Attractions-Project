@@ -7,9 +7,6 @@ import customtkinter
 
 
 from globall import *
-from skllite import *
-from site import *
-from opisanie import *
 
 conn = sqlite3.connect('database.db')
 c = conn.cursor()
@@ -71,14 +68,14 @@ def read_column(column_name):
     for row in rows:
         print(row[0])
 
-add_city_opis("Санкт-Петербург", "Город на Неве", "Северо-Западная Россия")
-opisenie.commit()
-opisenie_cursor.execute('SELECT id FROM cities')
-rows = opisenie_cursor.fetchall()
-f = ''
-for row in rows:
-    f = row[0]
-print(f)
+# add_city_opis("Санкт-Петербург", "Город на Неве", "Северо-Западная Россия")
+# opisenie.commit()
+# opisenie_cursor.execute('SELECT id FROM cities')
+# rows = opisenie_cursor.fetchall()
+# f = ''
+# for row in rows:
+#     f = row[0]
+# print(f)
 
 customtkinter.set_appearance_mode("light")
 customtkinter.set_default_color_theme("dark-blue")
@@ -178,7 +175,7 @@ class App(customtkinter.CTk):
             return
         self.login_label.destroy()
         self.login_frame.destroy()
-        self.after(0, lambda: self.state('zoomed'))
+        self.after(0, lambda:self.state('zoomed'))
         # установиливаю макет сетки 1x2
         self.grid_rowconfigure(0, weight=1)
         self.grid_columnconfigure(1, weight=1)
@@ -251,6 +248,32 @@ class App(customtkinter.CTk):
                 corner_radius=0, fg_color="transparent")
         self.home_frame.grid_columnconfigure(0, weight=1)
 
+        self.home_Lable = customtkinter.CTkLabel(self.home_frame,
+        text='Главная', font=customtkinter.CTkFont(size=40, weight="bold"))
+        self.home_Lable.grid()
+
+        self.home_None = customtkinter.CTkLabel(self.home_frame,
+        text='',)
+        self.home_None.grid(row=1, column=0)
+        self.home_None = customtkinter.CTkLabel(self.home_frame,
+                                                text='', )
+        self.home_None.grid(row=2, column=0)
+        self.home_None = customtkinter.CTkLabel(self.home_frame,
+                                                text='', )
+        self.home_None.grid(row=3, column=0)
+
+        self.home_Lable_all = customtkinter.CTkLabel(self.home_frame,
+        text='Город         Название'
+             '              Описание        Уже был       '
+             'Не хочу быть',
+            font=customtkinter.CTkFont(size=30, weight="bold"))
+        self.home_Lable_all.grid(row=4, column=0)
+
+        tk_textbox = customtkinter.CTkTextbox(self.home_frame, activate_scrollbars=False)
+        tk_textbox.grid(row=5, column=0, sticky="nsew")
+        ctk_textbox_scrollbar = customtkinter.CTkScrollbar(self.home_frame, command=tk_textbox.yview)
+        ctk_textbox_scrollbar.grid(row=5, column=1, sticky="ns")
+        tk_textbox.configure(yscrollcommand=ctk_textbox_scrollbar.set)
 
         # создаем 3 фрейм
         self.second_frame = customtkinter.CTkFrame(self, corner_radius=0,
