@@ -70,12 +70,6 @@ opisenie.commit()
 
 # add_city_opis("Санкт-Петербург", "Город на Неве", "Северо-Западная Россия")
 # opisenie.commit()
-# opisenie_cursor.execute('SELECT id FROM cities')
-# rows = opisenie_cursor.fetchall()
-# f = ''
-# for row in rows:
-#     f = row[0]
-# print(f)
 set_appearance_mode("light")
 set_default_color_theme("dark-blue")
 class App(CTk):
