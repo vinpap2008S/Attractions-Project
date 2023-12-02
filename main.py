@@ -44,7 +44,6 @@ def check_city(name):# Проверяем наличие города в баз�
         return 1
     else:
         return 0
-print(check_city("Москва"))
 def add_user(login, password, array1, array2):
     c.execute('''
         INSERT INTO users (login, password, array1, array2)
