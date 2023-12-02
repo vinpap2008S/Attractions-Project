@@ -6,30 +6,6 @@ import sqlite3
 import customtkinter
 
 from globall import *
-
-conn = sqlite3.connect('database.db')
-c = conn.cursor()
-c.execute('''
-    CREATE TABLE IF NOT EXISTS users (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        login TEXT,
-        password TEXT,
-        array1 TEXT,
-        array2 TEXT
-    )
-''')
-site = sqlite3.connect('cities.db')
-site.execute('''CREATE TABLE IF NOT EXISTS cities
-             (id INTEGER PRIMARY KEY AUTOINCREMENT,
-             name TEXT NOT NULL);''')
-opisenie = sqlite3.connect('opisenie.db')
-opisenie_cursor = opisenie.cursor()
-opisenie_cursor.execute('''CREATE TABLE IF NOT EXISTS cities
-             (id INTEGER PRIMARY KEY AUTOINCREMENT,
-             name TEXT NOT NULL,
-             description TEXT NOT NULL,
-             location TEXT NOT NULL);''')
-
 def add_city(name):# Добавляем новый город в базу данных
     site.execute("INSERT INTO cities (name) VALUES (?)", (name,))
     site.commit()
@@ -66,6 +42,42 @@ def read_column(column_name):
     for row in rows:
         print(row[0])
 
+conn = sqlite3.connect('database.db')
+c = conn.cursor()
+c.execute('''
+    CREATE TABLE IF NOT EXISTS users (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        login TEXT,
+        password TEXT,
+        array1 TEXT,
+        array2 TEXT
+    )
+''')
+site = sqlite3.connect('cities.db')
+site.execute('''CREATE TABLE IF NOT EXISTS cities
+             (id INTEGER PRIMARY KEY AUTOINCREMENT,
+             name TEXT NOT NULL);''')
+
+opisenie = sqlite3.connect('opisenie.db')
+opisenie_cursor = opisenie.cursor()
+opisenie_cursor.execute('''CREATE TABLE IF NOT EXISTS cities
+             (id INTEGER PRIMARY KEY AUTOINCREMENT,
+             name TEXT NOT NULL,
+             description TEXT NOT NULL,
+             location TEXT NOT NULL);''')
+
+opisenie.commit()
+opisenie_cursor.execute("SELECT name, description, location FROM cities")
+rows = opisenie_cursor.fetchall()
+f = 0
+for row in rows:
+    f+=1
+home_masive = []
+mas = []
+for i in range(f):
+    home_masive = mas
+
+
 # add_city_opis("Санкт-Петербург", "Город на Неве", "Северо-Западная Россия")
 # opisenie.commit()
 # opisenie_cursor.execute('SELECT id FROM cities')
@@ -74,10 +86,10 @@ def read_column(column_name):
 # for row in rows:
 #     f = row[0]
 # print(f)
-
 customtkinter.set_appearance_mode("light")
 customtkinter.set_default_color_theme("dark-blue")
 class App(customtkinter.CTk):
+
     def __init__(self):
         super().__init__()
         screen_width = self.winfo_screenwidth()
@@ -246,6 +258,8 @@ class App(customtkinter.CTk):
                 corner_radius=0, fg_color="transparent")
         self.home_frame.grid_columnconfigure(0, weight=1)
 
+        screen_height = self.winfo_screenheight()
+
         self.home_Lable = customtkinter.CTkLabel(self.home_frame,
         text='Главная', font=customtkinter.CTkFont(size=40, weight="bold"))
         self.home_Lable.grid()
@@ -267,11 +281,10 @@ class App(customtkinter.CTk):
             font=customtkinter.CTkFont(size=30, weight="bold"))
         self.home_Lable_all.grid(row=4, column=0)
 
-        tk_textbox = customtkinter.CTkTextbox(self.home_frame, activate_scrollbars=False)
+        tk_textbox = customtkinter.CTkScrollableFrame(self.home_frame)
         tk_textbox.grid(row=5, column=0, sticky="nsew")
-        ctk_textbox_scrollbar = customtkinter.CTkScrollbar(self.home_frame, command=tk_textbox.yview)
-        ctk_textbox_scrollbar.grid(row=5, column=1, sticky="ns")
-        tk_textbox.configure(yscrollcommand=ctk_textbox_scrollbar.set)
+        tk_textbox.configure(height=screen_height-250)
+
 
         # создаем 3 фрейм
         self.second_frame = customtkinter.CTkFrame(self, corner_radius=0,
@@ -310,7 +323,8 @@ class App(customtkinter.CTk):
     def frame_3_button_event(self):self.select_frame_by_name(FRAM2_NAME)
     def frame_4_button_event(self):self.select_frame_by_name(FRAM3_NAME)
     def frame_5_button_event(self):self.select_frame_by_name(FRAM4_NAME)
-    def change_appearance_mode_event(self, new_appearance_mode):
+    @staticmethod
+    def change_appearance_mode_event(new_appearance_mode):
         if new_appearance_mode == 'Светлая':
             customtkinter.set_appearance_mode("light")
         elif new_appearance_mode == 'Тёмная':
