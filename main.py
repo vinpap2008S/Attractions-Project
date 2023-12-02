@@ -26,12 +26,60 @@ site = sqlite3.connect('cities.db')
 site.execute('''CREATE TABLE IF NOT EXISTS cities
              (id INTEGER PRIMARY KEY AUTOINCREMENT,
              name TEXT NOT NULL);''')
-opisenie = sqlite3.connect('cities.db')
-opisenie.execute('''CREATE TABLE IF NOT EXISTS cities
+opisenie = sqlite3.connect('opisenie.db')
+opisenie_cursor = opisenie.cursor()
+opisenie_cursor.execute('''CREATE TABLE IF NOT EXISTS cities
              (id INTEGER PRIMARY KEY AUTOINCREMENT,
              name TEXT NOT NULL,
              description TEXT NOT NULL,
              location TEXT NOT NULL);''')
+
+def add_city(name):# Добавляем новый город в базу данных
+    site.execute("INSERT INTO cities (name) VALUES (?)", (name,))
+    site.commit()
+def add_city_opis(name, description, location):
+    # Добавляем новый город описание в базу данных
+    opisenie_cursor.execute("INSERT INTO cities (name, description, location) VALUES (?, ?, ?)", (name, description, location))
+    print("Город успешно добавлен!")
+def check_city(name):# Проверяем наличие города в базе данных
+    cursor = site.execute("SELECT name FROM cities WHERE name=?", (name,))
+    city = cursor.fetchone()
+    if city:
+        return 1
+    else:
+        return 0
+print(check_city("Москва"))
+def add_user(login, password, array1, array2):
+    c.execute('''
+        INSERT INTO users (login, password, array1, array2)
+        VALUES (?, ?, ?, ?)
+    ''', (login, password, array1, array2))
+    conn.commit()
+    print("Пользователь успешно добавлен!")
+def get_users():
+    c.execute('SELECT * FROM users')
+    rows = c.fetchall()
+    for row in rows:
+        print(row)
+def delete_user(login):
+    c.execute('DELETE FROM users WHERE login=?', (login,))
+    conn.commit()
+    print("Пользователь успешно удален!")
+def read_column(column_name):
+    c.execute(f'SELECT {column_name} FROM users')
+    rows = c.fetchall()
+    for row in rows:
+        print(row[0])
+
+add_city_opis("Санкт-Петербург", "Город на Неве", "Северо-Западная Россия")
+opisenie.commit()
+opisenie_cursor.execute('SELECT id FROM cities')
+rows = opisenie_cursor.fetchall()
+f = ''
+for row in rows:
+    f = row[0]
+print(f)
+
 customtkinter.set_appearance_mode("light")
 customtkinter.set_default_color_theme("dark-blue")
 class App(customtkinter.CTk):
@@ -56,6 +104,14 @@ class App(customtkinter.CTk):
                                 "add_user_dark.png")),
             dark_image=Image.open(
             os.path.join(image_path, "add_user_light.png")), size=(20, 20))
+        self.galochka_image = customtkinter.CTkImage(light_image=Image.open(
+            os.path.join(image_path, "Check_mark_23x20_02.svg.png")),
+            dark_image=Image.open(os.path.join(image_path, "Check_mark_23x20_02_white.svg.png")),
+            size=(20, 20))
+        self.plase_image = customtkinter.CTkImage(light_image=Image.open(
+            os.path.join(image_path, "900364.png")),
+            dark_image=Image.open(os.path.join(image_path, "900364_white.png")),
+            size=(20, 20))
 
         p = open('file(sgl)/Логин', 'r', encoding="UTF-8")
         self.login_frame = customtkinter.CTkFrame(self)
@@ -170,7 +226,7 @@ class App(customtkinter.CTk):
             border_spacing=10, text=FRAM3_NAME,
             fg_color="transparent", text_color=("gray10", "gray90"),
             hover_color=("gray70", "gray30"),
-            image=self.add_user_image, anchor="w",
+            image=self.galochka_image, anchor="w",
             command=self.frame_4_button_event)
         self.frame_4_button.grid(row=4, column=0, sticky="ew")
         # 5 фрейм
@@ -179,7 +235,7 @@ class App(customtkinter.CTk):
             border_spacing=10, text=FRAM4_NAME,
             fg_color="transparent", text_color=("gray10", "gray90"),
             hover_color=("gray70", "gray30"),
-            image=self.add_user_image, anchor="w",
+            image=self.plase_image, anchor="w",
             command=self.frame_5_button_event)
         self.frame_5_button.grid(row=5, column=0, sticky="ew")
         # выбор темы
