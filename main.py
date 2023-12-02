@@ -265,7 +265,8 @@ class App(CTk):
             font=CTkFont(size=30, weight="bold"))
         self.home_Lable_all.grid(row=4, column=0)
 
-        tk_textbox = CTkScrollableFrame(self.home_frame,height=screen_height-250)
+        tk_textbox = CTkScrollableFrame(self.home_frame,
+                                height=screen_height-250)
         tk_textbox.grid(row=5, column=0, sticky="nsew")
         tk_textbox.grid_columnconfigure(0, weight=1)
         tk_textbox.grid_columnconfigure(1, weight=1)
@@ -291,11 +292,11 @@ class App(CTk):
                                                    fg_color="transparent")
         # создаём 5 фрейм
         self.pozitive_frame = CTkFrame(self, corner_radius=0,
-                                                     fg_color="transparent")
+                                                fg_color="transparent")
         # Настройка
         self.navigation_frame_label = CTkLabel(self.third_frame,
-            text="Введите название достопремечательности и через / описание",
-                font=CTkFont(size=30, weight="bold"))
+        text="Введите название достопремечательности и через / описание",
+        font=CTkFont(size=30, weight="bold"))
         self.navigation_frame_label.grid(padx=200, pady=100)
         self.home_frame_frame_2_entry = CTkEntry(
             self.third_frame, width=1000, height=50)
