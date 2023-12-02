@@ -96,8 +96,8 @@ class App(CTk):
             dark_image=Image.open(
             os.path.join(image_path, "add_user_light.png")), size=(20, 20))
         self.galochka_image = CTkImage(light_image=Image.open(
-            os.path.join(image_path, "Check_mark_23x20_02.svg.png")),
-            dark_image=Image.open(os.path.join(image_path, "Check_mark_23x20_02_white.svg.png")),
+            os.path.join(image_path, "Check_mark_23x20_02svg.png")),
+            dark_image=Image.open(os.path.join(image_path, "Check_mark_23x20_02_whitesvg.png")),
             size=(20, 20))
         self.plase_image = CTkImage(light_image=Image.open(
             os.path.join(image_path, "900364.png")),
