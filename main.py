@@ -5,7 +5,6 @@ import sqlite3
 
 import customtkinter
 
-
 from globall import *
 
 conn = sqlite3.connect('database.db')
