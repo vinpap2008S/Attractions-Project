@@ -10,6 +10,3 @@ def add_city(name, description, location=""):
 # add_city("Санкт-Петербург", "Город на Неве", "Северо-Западная Россия")
 # check_city("Москва")
 # check_city("Екатеринбург")
-
-# Закрываем соединение с базой данных
-opisenie.close()
