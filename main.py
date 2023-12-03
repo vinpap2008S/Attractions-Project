@@ -37,6 +37,16 @@ def read_login_pasvord():
     c.execute(f'SELECT login,password FROM users')
     rows = c.fetchall()
     return rows
+def read_negativ():
+    c.execute(f'SELECT array1 FROM users')
+    rows = c.fetchall()
+    return rows
+def read_pozitive():
+    c.execute(f'SELECT array2 FROM users')
+    rows = c.fetchall()
+    return rows
+def read_all():
+    return list (read_negativ()+read_pozitive())
 
 conn = sqlite3.connect('file(sgl)/database.db')
 c = conn.cursor()
