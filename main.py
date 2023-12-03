@@ -37,16 +37,16 @@ def read_login_pasvord():
     c.execute(f'SELECT login,password FROM users')
     rows = c.fetchall()
     return rows
-def read_negativ():
-    c.execute(f'SELECT array1 FROM users')
+def read_negativ(login):
+    c.execute(f'SELECT array1 FROM users WHERE login', login)
     rows = c.fetchall()
     return rows
-def read_pozitive():
-    c.execute(f'SELECT array2 FROM users')
+def read_pozitive(login):
+    c.execute(f'SELECT array2 FROM users WHERE login', login)
     rows = c.fetchall()
     return rows
-def read_all():
-    return list (read_negativ()+read_pozitive())
+def read_all(login):
+    return list (read_negativ(login)+read_pozitive(login))
 
 conn = sqlite3.connect('file(sgl)/database.db')
 c = conn.cursor()
@@ -55,8 +55,8 @@ c.execute('''
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         login TEXT,
         password TEXT,
-        array1 TEXT,
-        array2 TEXT
+        array1 BLOB,
+        array2 BLOB
     )
 ''')
 site = sqlite3.connect('file(sgl)/cities.db')
@@ -71,7 +71,8 @@ opisenie_cursor.execute('''CREATE TABLE IF NOT EXISTS cities
              description TEXT NOT NULL,
              location TEXT NOT NULL);''')
 # add_city_opis("Санкт-Петербург", "Город на Неве", "Северо-Западная Россия")
-# opisenie.commit()
+# opisenie.commit()'
+#print(read_all('p1'))
 set_appearance_mode("light")
 set_default_color_theme("dark-blue")
 class App(CTk):
@@ -373,11 +374,12 @@ class App(CTk):
                     return 0
                 else:
                     self.login_label1.grid_forget()
-                    self.login_label1 = CTkLabel(self.login_frame, text="Пароль или логин\nне правильный",
-                         font=CTkFont(size=20, weight="bold"))
+                    self.login_label1 = CTkLabel(
+                        self.login_frame, text="Пароль или логин\nне правильный",
+                        font=CTkFont(size=20, weight="bold"))
                     self.login_label1.grid(row=4, column=0)
                     return 1
-        add_user(LOGIN,password,0,0)
+        add_user(LOGIN, password,[0,0],[0,0])
         p = open('file(sgl)/Логин', 'w', encoding="UTF-8")
         p.write(LOGIN)
         self.login_label1.grid_forget()
