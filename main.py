@@ -51,6 +51,7 @@ def read_pozitive(login):
 def read_all(login):
     return (read_negativ(login)[0][1:-1]).split(", ")+(read_pozitive(login)[0][1:-1]).split(", ")
 
+
 conn = sqlite3.connect('file(sgl)/database.db')
 c = conn.cursor()
 c.execute('''
@@ -74,9 +75,10 @@ opisenie_cursor.execute('''CREATE TABLE IF NOT EXISTS cities
              description TEXT NOT NULL,
              location TEXT NOT NULL);''')
 # add_city_opis("Санкт-Петербург", "Город на Неве", "Северо-Западная Россия")
-# opisenie.commit()'
+# opisenie.commit()
 set_appearance_mode("light")
 set_default_color_theme("dark-blue")
+#print((read_negativ("фывывфывфывф")[0][1:-1]).replace(' ', '').split(','))
 class App(CTk):
     def __init__(self):
         super().__init__()
@@ -100,8 +102,9 @@ class App(CTk):
             dark_image=Image.open(
             os.path.join(image_path, "add_user_light.png")), size=(20, 20))
         self.galochka_image = CTkImage(light_image=Image.open(
-            os.path.join(image_path, "Check_mark_23x20_02svg.png")),
-            dark_image=Image.open(os.path.join(image_path, "Check_mark_23x20_02_whitesvg.png")),
+            os.path.join(image_path, "mark_blake.png")),
+            dark_image=Image.open(os.path.join(image_path,
+                                "mark_white.png")),
             size=(20, 20))
         self.plase_image = CTkImage(light_image=Image.open(
             os.path.join(image_path, "900364.png")),
@@ -178,6 +181,7 @@ class App(CTk):
         self.login_label.destroy()
         self.login_frame.destroy()
         self.after(0, lambda:self.state('zoomed'))
+        self.pozitive = (read_negativ("фывывфывфывф")[0][1:-1]).replace(' ', '').split(',')
         # установиливаю макет сетки 1x2
         self.grid_rowconfigure(0, weight=1)
         self.grid_columnconfigure(1, weight=1)
@@ -325,7 +329,7 @@ class App(CTk):
         for _ in rows:
             f += 1
         self.home_masive = []
-        self.mas = [1,2,3,4,5]
+        self.mas = [1,2,3,4,5,6]
         for i in range(f):
             self.home_masive.append(self.mas)
             opisenie_cursor.execute('SELECT name,description,location FROM cities')
@@ -334,9 +338,18 @@ class App(CTk):
                 self.home_masive[i][0] = CTkLabel(sel, text=row[0])
                 self.home_masive[i][1] = CTkLabel(sel, text=row[1])
                 self.home_masive[i][2] = CTkLabel(sel, text=row[2])
-                self.home_masive[i][3] = CTkButton(sel, text='Уже был')
-                self.home_masive[i][4] = CTkButton(sel, text='Не хочу')
+                self.home_masive[i][3] = CTkButton(sel, text='Уже был', command=self.biton_pozitive)
+                self.home_masive[i][4] = CTkButton(sel, text='Не хочу', command=self.biton_negetive)
         self.home_masive_grid(f)
+    def biton_pozitive(self):
+        self.home_masive_delite()
+        self.pozitive+=L# где взять L
+        c.execute(f'UPDATE users SET array1 = ? WHERE login = ?', (self.pozitive, LOGIN))
+        c.commit()
+
+        self.home_masive_grid()
+    def biton_negetive(self):
+        ...
     def home_masive_grid(self, f):
         for i in range(f):
             if str(i+1) not in read_all(LOGIN):
