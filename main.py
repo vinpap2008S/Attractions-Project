@@ -2,6 +2,7 @@
 from PIL import Image
 import os
 import sqlite3
+import json
 
 from customtkinter import *
 
@@ -20,10 +21,10 @@ def check_city(name):# Проверяем наличие города в баз�
     else:
         return 0
 def add_user(login, password, array1, array2):
-    c.execute('''
-        INSERT INTO users (login, password, array1, array2)
-        VALUES (?, ?, ?, ?)
-    ''', (login, password, array1, array2))
+    array1_join = json.dumps(array1)
+    array2_join = json.dumps(array2)
+    c.execute("INSERT INTO users (login, password, array1, array2) VALUES (?, ?, ?, ?)",
+              (login, password, array1_join, array2_join))
     conn.commit()
 def get_users():
     c.execute('SELECT * FROM users')
@@ -38,25 +39,27 @@ def read_login_pasvord():
     rows = c.fetchall()
     return rows
 def read_negativ(login):
-    c.execute(f'SELECT array1 FROM users WHERE login', login)
+    c.execute(f'SELECT array1 FROM users WHERE login=?', (login,))
     rows = c.fetchall()
+    rows = list(rows[0])
     return rows
 def read_pozitive(login):
-    c.execute(f'SELECT array2 FROM users WHERE login', login)
+    c.execute(f'SELECT array2 FROM users WHERE login=?', (login,))
     rows = c.fetchall()
+    rows = list(rows[0])
     return rows
 def read_all(login):
-    return list (read_negativ(login)+read_pozitive(login))
+    return (read_negativ(login)[0][1:-1]).split(", ")+(read_pozitive(login)[0][1:-1]).split(", ")
 
 conn = sqlite3.connect('file(sgl)/database.db')
 c = conn.cursor()
 c.execute('''
-    CREATE TABLE IF NOT EXISTS users (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        login TEXT,
-        password TEXT,
-        array1 BLOB,
-        array2 BLOB
+    CREATE TABLE IF NOT EXISTS users
+             (id INTEGER PRIMARY KEY AUTOINCREMENT,
+              login TEXT,
+              password TEXT,
+              array1 TEXT,
+              array2 TEXT
     )
 ''')
 site = sqlite3.connect('file(sgl)/cities.db')
@@ -72,7 +75,7 @@ opisenie_cursor.execute('''CREATE TABLE IF NOT EXISTS cities
              location TEXT NOT NULL);''')
 # add_city_opis("Санкт-Петербург", "Город на Неве", "Северо-Западная Россия")
 # opisenie.commit()'
-#print(read_all('p1'))
+print(read_all('sda'))
 set_appearance_mode("light")
 set_default_color_theme("dark-blue")
 class App(CTk):
@@ -379,7 +382,7 @@ class App(CTk):
                         font=CTkFont(size=20, weight="bold"))
                     self.login_label1.grid(row=4, column=0)
                     return 1
-        add_user(LOGIN, password,[0,0],[0,0])
+        add_user(LOGIN, password,[0],[0])
         p = open('file(sgl)/Логин', 'w', encoding="UTF-8")
         p.write(LOGIN)
         self.login_label1.grid_forget()
