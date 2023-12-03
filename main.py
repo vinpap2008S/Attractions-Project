@@ -75,11 +75,9 @@ opisenie_cursor.execute('''CREATE TABLE IF NOT EXISTS cities
              location TEXT NOT NULL);''')
 # add_city_opis("Санкт-Петербург", "Город на Неве", "Северо-Западная Россия")
 # opisenie.commit()'
-print(read_all('sda'))
 set_appearance_mode("light")
 set_default_color_theme("dark-blue")
 class App(CTk):
-
     def __init__(self):
         super().__init__()
         screen_width = self.winfo_screenwidth()
@@ -113,7 +111,7 @@ class App(CTk):
         p = open('file(sgl)/Логин', 'r', encoding="UTF-8")
         self.login_frame = CTkFrame(self)
         self.login_label = CTkLabel(self.login_frame,
-                                                  text="Регистрация/Вход",
+            text="Регистрация/Вход",
             font=CTkFont(size=30, weight="bold"))
         self.title("Богадство мира")
         if p.read() == '':
@@ -138,7 +136,6 @@ class App(CTk):
             self.main()
         p.close()
     def select_frame_by_name(self, name):
-        # Цвет кнопки от выбора
         self.home_button.configure(fg_color=("gray75", "gray25")
         if name == FRAMGL_NAME else "transparent")
         self.frame_2_button.configure(fg_color=("gray75", "gray25")
@@ -170,6 +167,11 @@ class App(CTk):
             self.pozitive_frame.grid(row=0, column=1, sticky="nsew")
         else:
             self.pozitive_frame.grid_forget()
+    def home_button_event(self):self.select_frame_by_name(FRAMGL_NAME)
+    def frame_2_button_event(self):self.select_frame_by_name(FRAM1_NAME)
+    def frame_3_button_event(self):self.select_frame_by_name(FRAM2_NAME)
+    def frame_4_button_event(self):self.select_frame_by_name(FRAM3_NAME)
+    def frame_5_button_event(self):self.select_frame_by_name(FRAM4_NAME)
     def main(self):
         if self.login_event():
             return
@@ -313,11 +315,6 @@ class App(CTk):
         self.bitin_2frame.grid(row=2, column=0, padx=200, pady=10)
         # Главный фрейм
         self.select_frame_by_name(FRAMGL_NAME)
-    def home_button_event(self):self.select_frame_by_name(FRAMGL_NAME)
-    def frame_2_button_event(self):self.select_frame_by_name(FRAM1_NAME)
-    def frame_3_button_event(self):self.select_frame_by_name(FRAM2_NAME)
-    def frame_4_button_event(self):self.select_frame_by_name(FRAM3_NAME)
-    def frame_5_button_event(self):self.select_frame_by_name(FRAM4_NAME)
     def home_masive_install(self,sel):
         opisenie_cursor.execute("SELECT name, description, location FROM cities")
         rows = opisenie_cursor.fetchall()
@@ -339,19 +336,21 @@ class App(CTk):
         self.home_masive_grid(f)
     def home_masive_grid(self, f):
         for i in range(f):
-            self.home_masive[i][0].grid(row=i, column=0)
-            self.home_masive[i][1].grid(row=i, column=1)
-            self.home_masive[i][2].grid(row=i, column=2)
-            self.home_masive[i][3].grid(row=i, column=3)
-            self.home_masive[i][4].grid(row=i, column=4)
-    def home_masive_delite(sel, self):
+            if str(i) not in read_all(LOGIN):
+                self.home_masive[i][0].grid(row=i, column=0)
+                self.home_masive[i][1].grid(row=i, column=1)
+                self.home_masive[i][2].grid(row=i, column=2)
+                self.home_masive[i][3].grid(row=i, column=3)
+                self.home_masive[i][4].grid(row=i, column=4)
+    def home_masive_delite(self, sel):
         for i in range(f):
-            self.home_masive.append(self.mas)
-            self.home_masive[i][0].destroy()
-            self.home_masive[i][1].destroy()
-            self.home_masive[i][2].destroy()
-            self.home_masive[i][3].destroy()
-            self.home_masive[i][4].destroy()
+            if str(i) not in read_all(LOGIN):
+                sel.home_masive.append(sel.mas)
+                sel.home_masive[i][0].destroy()
+                sel.home_masive[i][1].destroy()
+                sel.home_masive[i][2].destroy()
+                sel.home_masive[i][3].destroy()
+                sel.home_masive[i][4].destroy()
     @staticmethod
     def change_appearance_mode_event(new_appearance_mode):
         if new_appearance_mode == 'Светлая':
@@ -389,7 +388,6 @@ class App(CTk):
         p.close()
         return 0
     def login_event(self):
-        global LOGIN
         self.login_label1 = CTkLabel(self.login_frame
             , text="",
              font=CTkFont(size=20, weight="bold"))
@@ -399,6 +397,7 @@ class App(CTk):
             LOGIN = self.username_entry.get()
             password = self.password_entry.get()
         else:
+            LOGIN = p.read()
             return 0
         p.close()
         return self.avtor(password)

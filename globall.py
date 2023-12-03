@@ -4,7 +4,6 @@ FRAM1_NAME = "Добавление обьектов"
 FRAM2_NAME = "Профиль"
 FRAM3_NAME = "Уже был"
 FRAM4_NAME = "Не хочу быть"
-LOGIN = ''
 
 # def add_city_opis(name, description, location):
 #     # Добавляем новый город описание в базу данных
