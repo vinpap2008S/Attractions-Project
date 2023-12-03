@@ -12,7 +12,6 @@ def add_city(name):# Добавляем новый город в базу дан
 def add_city_opis(name, description, location):
     # Добавляем новый город описание в базу данных
     opisenie_cursor.execute("INSERT INTO cities (name, description, location) VALUES (?, ?, ?)", (name, description, location))
-    print("Город успешно добавлен!")
 def check_city(name):# Проверяем наличие города в базе данных
     cursor = site.execute("SELECT name FROM cities WHERE name=?", (name,))
     city = cursor.fetchone()
@@ -26,7 +25,6 @@ def add_user(login, password, array1, array2):
         VALUES (?, ?, ?, ?)
     ''', (login, password, array1, array2))
     conn.commit()
-    print("Пользователь успешно добавлен!")
 def get_users():
     c.execute('SELECT * FROM users')
     rows = c.fetchall()
@@ -35,14 +33,13 @@ def get_users():
 def delete_user(login):
     c.execute('DELETE FROM users WHERE login=?', (login,))
     conn.commit()
-    print("Пользователь успешно удален!")
 def read_column(column_name):
     c.execute(f'SELECT {column_name} FROM users')
     rows = c.fetchall()
     for row in rows:
         print(row[0])
 
-conn = sqlite3.connect('database.db')
+conn = sqlite3.connect('file(sgl)/database.db')
 c = conn.cursor()
 c.execute('''
     CREATE TABLE IF NOT EXISTS users (
@@ -53,21 +50,17 @@ c.execute('''
         array2 TEXT
     )
 ''')
-site = sqlite3.connect('cities.db')
+site = sqlite3.connect('file(sgl)/cities.db')
 site.execute('''CREATE TABLE IF NOT EXISTS cities
              (id INTEGER PRIMARY KEY AUTOINCREMENT,
              name TEXT NOT NULL);''')
-
-opisenie = sqlite3.connect('opisenie.db')
+opisenie = sqlite3.connect('file(sgl)/opisenie.db')
 opisenie_cursor = opisenie.cursor()
 opisenie_cursor.execute('''CREATE TABLE IF NOT EXISTS cities
              (id INTEGER PRIMARY KEY AUTOINCREMENT,
              name TEXT NOT NULL,
              description TEXT NOT NULL,
              location TEXT NOT NULL);''')
-
-opisenie.commit()
-
 # add_city_opis("Санкт-Петербург", "Город на Неве", "Северо-Западная Россия")
 # opisenie.commit()
 set_appearance_mode("light")
@@ -328,7 +321,7 @@ class App(CTk):
                 self.home_masive[i][0] = CTkLabel(sel, text=row[0])
                 self.home_masive[i][1] = CTkLabel(sel, text=row[1])
                 self.home_masive[i][2] = CTkLabel(sel, text=row[2])
-                self.home_masive[i][3] = CTkButton(sel, text='Был')
+                self.home_masive[i][3] = CTkButton(sel, text='Уже был')
                 self.home_masive[i][4] = CTkButton(sel, text='Не хочу')
         self.home_masive_grid(f)
     def home_masive_grid(self, f):
