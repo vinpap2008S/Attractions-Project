@@ -33,11 +33,10 @@ def get_users():
 def delete_user(login):
     c.execute('DELETE FROM users WHERE login=?', (login,))
     conn.commit()
-def read_column(column_name):
-    c.execute(f'SELECT {column_name} FROM users')
+def read_login_pasvord():
+    c.execute(f'SELECT login,password FROM users')
     rows = c.fetchall()
-    for row in rows:
-        print(row[0])
+    return rows
 
 conn = sqlite3.connect('file(sgl)/database.db')
 c = conn.cursor()
@@ -334,12 +333,11 @@ class App(CTk):
     def home_masive_delite(sel, self):
         for i in range(f):
             self.home_masive.append(self.mas)
-            self.home_masive[i][0] = CTkLabel(self, text='dsfdfsdf')
-            self.home_masive[i][1] = CTkLabel(self, text='dsfdfsdf')
-            self.home_masive[i][2] = CTkLabel(self, text='dsfdfsdf')
-            self.home_masive[i][3] = CTkButton(self, text='dsfdfsdf')
-            self.home_masive[i][4] = CTkButton(self, text='dsfdfsdf')
-
+            self.home_masive[i][0].destroy()
+            self.home_masive[i][1].destroy()
+            self.home_masive[i][2].destroy()
+            self.home_masive[i][3].destroy()
+            self.home_masive[i][4].destroy()
     @staticmethod
     def change_appearance_mode_event(new_appearance_mode):
         if new_appearance_mode == 'Светлая':
@@ -349,14 +347,15 @@ class App(CTk):
         else:
             set_appearance_mode("system")
     # не трож убьёт
-    def avtor(self, password, file):
+    def avtor(self, password):
         if password == '':
             return 1
         if LOGIN == '':
             return 1
-        for file3 in open('file(sgl)/Авторизация', 'r', encoding="UTF-8"):
-            if file3[2:file3.find('\t', 2)] == LOGIN:
-                if file3[file3.find('\t', 2) + 1:file3.find('\t', file3.find('\t', 2) + 1)] == password:
+
+        for file3 in read_login_pasvord():
+            if file3[0] == LOGIN:
+                if file3[1] == password:
                     p = open('file(sgl)/Логин', 'w', encoding="UTF-8")
                     p.write(LOGIN)
                     p.close()
@@ -369,15 +368,14 @@ class App(CTk):
                          font=CTkFont(size=20, weight="bold"))
                     self.login_label1.grid(row=4, column=0)
                     return 1
-        file.write(str(int(g) + 1) + '\t' + LOGIN + '\t' + password + '\t' + 'f' + '\n')
-        file.close()
+        add_user(LOGIN,password,0,0)
         p = open('file(sgl)/Логин', 'w', encoding="UTF-8")
         p.write(LOGIN)
         self.login_label1.grid_forget()
         p.close()
         return 0
     def login_event(self):
-        global g,LOGIN
+        global LOGIN
         self.login_label1 = CTkLabel(self.login_frame
             , text="",
              font=CTkFont(size=20, weight="bold"))
@@ -388,14 +386,8 @@ class App(CTk):
             password = self.password_entry.get()
         else:
             return 0
-        file = open('file(sgl)/Авторизация', 'a', encoding="UTF-8")
-        g = 0
-        for nine in open('file(sgl)/Авторизация', 'r', encoding="UTF-8"):
-            g = nine[0]
-        if g == 'Л':
-            g = 0
         p.close()
-        return self.avtor(password,file)
+        return self.avtor(password)
 
 if __name__ == "__main__":
     app = App()
