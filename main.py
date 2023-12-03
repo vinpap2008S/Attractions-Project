@@ -346,7 +346,6 @@ class App(CTk):
             set_appearance_mode("dark")
         else:
             set_appearance_mode("system")
-    # не трож убьёт
     def avtor(self, password):
         if password == '':
             return 1
@@ -359,7 +358,7 @@ class App(CTk):
                     p = open('file(sgl)/Логин', 'w', encoding="UTF-8")
                     p.write(LOGIN)
                     p.close()
-                    self.login_frame.grid_forget()  # remove LOGIN frame
+                    self.login_frame.grid_forget()
                     self.login_frame.grid(row=0, column=0, sticky="nsew", padx=100)
                     return 0
                 else:
