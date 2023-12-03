@@ -316,6 +316,9 @@ class App(CTk):
         # Главный фрейм
         self.select_frame_by_name(FRAMGL_NAME)
     def home_masive_install(self,sel):
+        global LOGIN
+        p = open('file(sgl)/Логин', 'r', encoding="UTF-8")
+        LOGIN = p.read()
         opisenie_cursor.execute("SELECT name, description, location FROM cities")
         rows = opisenie_cursor.fetchall()
         f = 0
@@ -336,7 +339,7 @@ class App(CTk):
         self.home_masive_grid(f)
     def home_masive_grid(self, f):
         for i in range(f):
-            if str(i) not in read_all(LOGIN):
+            if str(i+1) not in read_all(LOGIN):
                 self.home_masive[i][0].grid(row=i, column=0)
                 self.home_masive[i][1].grid(row=i, column=1)
                 self.home_masive[i][2].grid(row=i, column=2)
@@ -388,6 +391,7 @@ class App(CTk):
         p.close()
         return 0
     def login_event(self):
+        global LOGIN
         self.login_label1 = CTkLabel(self.login_frame
             , text="",
              font=CTkFont(size=20, weight="bold"))
