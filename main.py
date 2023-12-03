@@ -102,9 +102,9 @@ class App(CTk):
             dark_image=Image.open(
             os.path.join(image_path, "add_user_light.png")), size=(20, 20))
         self.galochka_image = CTkImage(light_image=Image.open(
-            os.path.join(image_path, "mark_blake.png")),
+            os.path.join(image_path, "free-icon-checked-153603.png")),
             dark_image=Image.open(os.path.join(image_path,
-                                "mark_white.png")),
+                                "free-icon-checked-153603.png")),
             size=(20, 20))
         self.plase_image = CTkImage(light_image=Image.open(
             os.path.join(image_path, "900364.png")),
