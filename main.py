@@ -41,15 +41,19 @@ def read_login_pasvord():
 def read_negativ(login):
     c.execute(f'SELECT array1 FROM users WHERE login=?', (login,))
     rows = c.fetchall()
-    rows = list(rows[0])
+    print(rows)
+    rows = json.load(rows)
+    print(rows)
     return rows
 def read_pozitive(login):
     c.execute(f'SELECT array2 FROM users WHERE login=?', (login,))
     rows = c.fetchall()
-    rows = list(rows[0])
+    print(rows[0][0])
+    rows = json.load(rows[0][0])
+    print(rows)
     return rows
 def read_all(login):
-    return (read_negativ(login)[0][1:-1]).split(", ")+(read_pozitive(login)[0][1:-1]).split(", ")
+    return read_negativ(login)+read_pozitive(login)
 
 
 conn = sqlite3.connect('file(sgl)/database.db')
@@ -181,7 +185,10 @@ class App(CTk):
         self.login_label.destroy()
         self.login_frame.destroy()
         self.after(0, lambda:self.state('zoomed'))
-        self.pozitive = (read_negativ("фывывфывфывф")[0][1:-1]).replace(' ', '').split(',')
+        p = open('file(sgl)/Логин', 'r', encoding="UTF-8")
+        LOGIN = p.read()
+        p.close()
+        self.pozitive = read_pozitive(LOGIN)
         # установиливаю макет сетки 1x2
         self.grid_rowconfigure(0, weight=1)
         self.grid_columnconfigure(1, weight=1)
@@ -361,7 +368,7 @@ class App(CTk):
         , (self.pozitive, LOGIN))
         conn.commit()
         self.home_masive_grid(f)
-        self.pozitive = json.load(self.pozitive)
+        self.pozitive = read_pozitive(LOGIN)
     def biton_negetive(self):
         ...
     def home_masive_grid(self, f):
@@ -411,7 +418,7 @@ class App(CTk):
                         font=CTkFont(size=20, weight="bold"))
                     self.login_label1.grid(row=4, column=0)
                     return 1
-        add_user(LOGIN, password,[0],[0])
+        add_user(LOGIN, password,0,0)
         p = open('file(sgl)/Логин', 'w', encoding="UTF-8")
         p.write(LOGIN)
         self.login_label1.grid_forget()
@@ -429,6 +436,7 @@ class App(CTk):
             password = self.password_entry.get()
         else:
             LOGIN = p.read()
+            p.close()
             return 0
         p.close()
         return self.avtor(password)
