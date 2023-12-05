@@ -41,16 +41,12 @@ def read_login_pasvord():
 def read_negativ(login):
     c.execute(f'SELECT array1 FROM users WHERE login=?', (login,))
     rows = c.fetchall()
-    print(rows)
-    rows = json.load(rows)
-    print(rows)
+    rows = json.loads(rows[0][0])
     return rows
 def read_pozitive(login):
     c.execute(f'SELECT array2 FROM users WHERE login=?', (login,))
     rows = c.fetchall()
-    print(rows[0][0])
-    rows = json.load(rows[0][0])
-    print(rows)
+    rows = json.loads(rows[0][0])
     return rows
 def read_all(login):
     return read_negativ(login)+read_pozitive(login)
@@ -352,7 +348,7 @@ class App(CTk):
     def biton_pozitive(self):
         self.home_masive_delite(tk_textbox,f)
         print(self.pozitive)
-        self.pozitive = (read_pozitive(LOGIN)[0][1:-1]).replace(' ', '').split(',') # тут проблема
+        self.pozitive = read_pozitive(LOGIN)
         opisenie_cursor.execute('SELECT name,description,location FROM cities')
         rows = opisenie_cursor.fetchall()
         i = 0
@@ -382,12 +378,12 @@ class App(CTk):
     def home_masive_delite(self, sel, f):
         for i in range(f):
             if str(i) not in read_all(LOGIN):
-                sel.home_masive.append(sel.mas)
-                sel.home_masive[i][0].destroy()
-                sel.home_masive[i][1].destroy()
-                sel.home_masive[i][2].destroy()
-                sel.home_masive[i][3].destroy()
-                sel.home_masive[i][4].destroy()
+                self.home_masive.append(self.mas)
+                self.home_masive[i][0].destroy()
+                self.home_masive[i][1].destroy()
+                self.home_masive[i][2].destroy()
+                self.home_masive[i][3].destroy()
+                self.home_masive[i][4].destroy()
     @staticmethod
     def change_appearance_mode_event(new_appearance_mode):
         if new_appearance_mode == 'Светлая':
@@ -418,7 +414,7 @@ class App(CTk):
                         font=CTkFont(size=20, weight="bold"))
                     self.login_label1.grid(row=4, column=0)
                     return 1
-        add_user(LOGIN, password,0,0)
+        add_user(LOGIN, password,[0],[0])
         p = open('file(sgl)/Логин', 'w', encoding="UTF-8")
         p.write(LOGIN)
         self.login_label1.grid_forget()
