@@ -39,12 +39,12 @@ def read_login_pasvord():
     rows = c.fetchall()
     return rows
 def read_negativ(login):
-    c.execute(f'SELECT array1 FROM users WHERE login=?', (login,))
+    c.execute(f'SELECT array2 FROM users WHERE login=?', (login,))
     rows = c.fetchall()
     rows = json.loads(rows[0][0])
     return rows
 def read_pozitive(login):
-    c.execute(f'SELECT array2 FROM users WHERE login=?', (login,))
+    c.execute(f'SELECT array1 FROM users WHERE login=?', (login,))
     rows = c.fetchall()
     rows = json.loads(rows[0][0])
     return rows
@@ -347,7 +347,6 @@ class App(CTk):
         self.home_masive_grid(f)
     def biton_pozitive(self):
         self.home_masive_delite(tk_textbox,f)
-        print(self.pozitive)
         self.pozitive = read_pozitive(LOGIN)
         opisenie_cursor.execute('SELECT name,description,location FROM cities')
         rows = opisenie_cursor.fetchall()
