@@ -276,7 +276,7 @@ class App(CTk):
              '             Не хочу быть',
             font=CTkFont(size=30, weight="bold"))
         self.home_Lable_all.grid(row=4, column=0)
-
+        global tk_textbox
         tk_textbox = CTkScrollableFrame(self.home_frame,
                                 height=screen_height-250)
         tk_textbox.grid(row=5, column=0, sticky="nsew")
@@ -285,6 +285,7 @@ class App(CTk):
         tk_textbox.grid_columnconfigure(2, weight=1)
         tk_textbox.grid_columnconfigure(3, weight=1)
         tk_textbox.grid_columnconfigure(4, weight=1)
+
         self.home_masive_install(tk_textbox)
 
         # создаем 3 фрейм
@@ -320,7 +321,7 @@ class App(CTk):
         # Главный фрейм
         self.select_frame_by_name(FRAMGL_NAME)
     def home_masive_install(self,sel):
-        global LOGIN
+        global LOGIN, f
         p = open('file(sgl)/Логин', 'r', encoding="UTF-8")
         LOGIN = p.read()
         opisenie_cursor.execute("SELECT name, description, location FROM cities")
@@ -342,12 +343,25 @@ class App(CTk):
                 self.home_masive[i][4] = CTkButton(sel, text='Не хочу', command=self.biton_negetive)
         self.home_masive_grid(f)
     def biton_pozitive(self):
-        self.home_masive_delite()
-        self.pozitive+=L# где взять L
-        c.execute(f'UPDATE users SET array1 = ? WHERE login = ?', (self.pozitive, LOGIN))
-        c.commit()
-
-        self.home_masive_grid()
+        self.home_masive_delite(tk_textbox,f)
+        print(self.pozitive)
+        self.pozitive = (read_pozitive(LOGIN)[0][1:-1]).replace(' ', '').split(',') # тут проблема
+        opisenie_cursor.execute('SELECT name,description,location FROM cities')
+        rows = opisenie_cursor.fetchall()
+        i = 0
+        for row in rows:
+            if self.home_masive[i][0].cget("text") == row[0]\
+                and self.home_masive[i][1].cget("text") == row[1] \
+                and self.home_masive[i][2].cget("text") == row[2]:
+                break
+            i+=1
+        self.pozitive+=str(i+1)
+        self.pozitive = json.dumps(self.pozitive)
+        c.execute(f'UPDATE users SET array1 = ? WHERE login = ?'
+        , (self.pozitive, LOGIN))
+        conn.commit()
+        self.home_masive_grid(f)
+        self.pozitive = json.load(self.pozitive)
     def biton_negetive(self):
         ...
     def home_masive_grid(self, f):
@@ -358,7 +372,7 @@ class App(CTk):
                 self.home_masive[i][2].grid(row=i, column=2)
                 self.home_masive[i][3].grid(row=i, column=3)
                 self.home_masive[i][4].grid(row=i, column=4)
-    def home_masive_delite(self, sel):
+    def home_masive_delite(self, sel, f):
         for i in range(f):
             if str(i) not in read_all(LOGIN):
                 sel.home_masive.append(sel.mas)
