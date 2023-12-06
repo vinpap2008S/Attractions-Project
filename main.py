@@ -312,7 +312,7 @@ class App(CTk):
         tk_textbox.grid_columnconfigure(2, weight=1)
         tk_textbox.grid_columnconfigure(3, weight=1)
         tk_textbox.grid_columnconfigure(4, weight=1)
-
+        tk_textbox.grid_columnconfigure(5, weight=1)
         self.home_masive_install(tk_textbox)
         # Настройка
         self.navigation_frame_label = CTkLabel(self.third_frame,
@@ -348,18 +348,21 @@ class App(CTk):
                     self.home_masive[i][0] = CTkLabel(sel, text=row[0])
                     self.home_masive[i][1] = CTkLabel(sel, text=row[1])
                     self.home_masive[i][2] = CTkLabel(sel, text=row[2])
-                    self.home_masive[i][3] = CTkButton(sel, text='Уже был', command=self.biton_pozitive)
-                    self.home_masive[i][4] = CTkButton(sel, text='Не хочу', command=self.biton_negetive)
+                    self.home_masive[i][3] = CTkLabel(sel, text=row[3])
+                    self.home_masive[i][4] = CTkButton(sel, text='Уже был', command=self.biton_pozitive)
+                    self.home_masive[i][5] = CTkButton(sel, text='Не хочу', command=self.biton_negetive)
                 elif str(i + 1) in read_pozitive(LOGIN):
                     self.home_masive[i][0] = CTkLabel(self.pozitive_frame, text=row[0])
                     self.home_masive[i][1] = CTkLabel(self.pozitive_frame, text=row[1])
                     self.home_masive[i][2] = CTkLabel(self.pozitive_frame, text=row[2])
-                    self.home_masive[i][3] = CTkButton(self.pozitive_frame, text='Вернуть')
+                    self.home_masive[i][3] = CTkLabel(self.pozitive_frame, text=row[3])
+                    self.home_masive[i][4] = CTkButton(self.pozitive_frame, text='Вернуть')
                 else:
-                    self.home_masive[i][0] = CTkLabel(self.negative_frame, text=row[0])
-                    self.home_masive[i][1] = CTkLabel(self.negative_frame, text=row[1])
-                    self.home_masive[i][2] = CTkLabel(self.negative_frame, text=row[2])
-                    self.home_masive[i][3] = CTkButton(self.negative_frame, text='Вернуть')
+                    self.home_masive[i][0] = CTkLabel(self.pozitive_frame, text=row[0])
+                    self.home_masive[i][1] = CTkLabel(self.pozitive_frame, text=row[1])
+                    self.home_masive[i][2] = CTkLabel(self.pozitive_frame, text=row[2])
+                    self.home_masive[i][3] = CTkLabel(self.pozitive_frame, text=row[3])
+                    self.home_masive[i][4] = CTkButton(self.pozitive_frame, text='Вернуть')
         self.home_masive_grid(f)
     def biton_pozitive(self):
         self.home_masive_delite(tk_textbox,f)
@@ -407,11 +410,13 @@ class App(CTk):
                 self.home_masive[i][2].grid(row=i, column=2)
                 self.home_masive[i][3].grid(row=i, column=3)
                 self.home_masive[i][4].grid(row=i, column=4)
+                self.home_masive[i][5].grid(row=i, column=4)
             else:
                 self.home_masive[i][0].grid(row=i, column=0)
                 self.home_masive[i][1].grid(row=i, column=1)
                 self.home_masive[i][2].grid(row=i, column=2)
                 self.home_masive[i][3].grid(row=i, column=3)
+                self.home_masive[i][4].grid(row=i, column=4)
     def home_masive_delite(self, f):
         for i in range(f):
             if str(i) not in read_all(LOGIN):
