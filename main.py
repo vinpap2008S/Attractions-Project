@@ -49,7 +49,9 @@ def read_pozitive(login):
     rows = json.loads(rows[0][0])
     return rows
 def read_all(login):
-    return (read_negativ(login)+read_pozitive(login)).sort()
+    a =list(read_negativ(login)+read_pozitive(login))
+    a.sort()
+    return a
 
 
 conn = sqlite3.connect('file(sgl)/database.db')
@@ -163,13 +165,13 @@ class App(CTk):
         else:
             self.third_frame.grid_forget()
         if name == FRAM3_NAME:
-            self.negative_frame.grid(row=0, column=1, sticky="nsew")
-        else:
-            self.negative_frame.grid_forget()
-        if name == FRAM4_NAME:
             self.pozitive_frame.grid(row=0, column=1, sticky="nsew")
         else:
             self.pozitive_frame.grid_forget()
+        if name == FRAM4_NAME:
+            self.negative_frame.grid(row=0, column=1, sticky="nsew")
+        else:
+            self.negative_frame.grid_forget()
     def home_button_event(self):self.select_frame_by_name(FRAMGL_NAME)
     def frame_2_button_event(self):self.select_frame_by_name(FRAM1_NAME)
     def frame_3_button_event(self):self.select_frame_by_name(FRAM2_NAME)
@@ -182,9 +184,10 @@ class App(CTk):
         self.login_frame.destroy()
         self.after(0, lambda:self.state('zoomed'))
         p = open('file(sgl)/Логин', 'r', encoding="UTF-8")
-        self.LOGIN = p.read()
+        LOGIN = p.read()
         p.close()
-        self.pozitive = read_pozitive(self.LOGIN)
+        self.pozitive = read_pozitive(LOGIN)
+        self.negative = read_negativ(LOGIN)
         # установиливаю макет сетки 1x2
         self.grid_rowconfigure(0, weight=1)
         self.grid_columnconfigure(1, weight=1)
@@ -279,6 +282,26 @@ class App(CTk):
              '             Не хочу быть',
             font=CTkFont(size=30, weight="bold"))
         self.home_Lable_all.grid(row=4, column=0)
+
+
+        # создаем 3 фрейм
+        self.second_frame = CTkFrame(self, corner_radius=0,
+            fg_color="transparent")
+        # Настройка
+        self.navigation_frame2_label = CTkLabel(
+                self.second_frame,
+                text=LOGIN,
+                font=CTkFont(size=30, weight="bold"))
+        self.navigation_frame2_label.grid(padx=200, pady=100)
+        # создаем 2 фрейм
+        self.third_frame = CTkFrame(self, corner_radius=0,
+            fg_color="transparent")
+        # создаём 4 фрейм
+        self.pozitive_frame = CTkFrame(self, corner_radius=0,
+                                                   fg_color="transparent")
+        # создаём 5 фрейм
+        self.negative_frame = CTkFrame(self, corner_radius=0,
+                                                fg_color="transparent")
         global tk_textbox
         tk_textbox = CTkScrollableFrame(self.home_frame,
                                 height=screen_height-250)
@@ -290,25 +313,6 @@ class App(CTk):
         tk_textbox.grid_columnconfigure(4, weight=1)
 
         self.home_masive_install(tk_textbox)
-
-        # создаем 3 фрейм
-        self.second_frame = CTkFrame(self, corner_radius=0,
-            fg_color="transparent")
-        # Настройка
-        self.navigation_frame2_label = CTkLabel(
-                self.second_frame,
-                text=self.LOGIN,
-                font=CTkFont(size=30, weight="bold"))
-        self.navigation_frame2_label.grid(padx=200, pady=100)
-        # создаем 2 фрейм
-        self.third_frame = CTkFrame(self, corner_radius=0,
-            fg_color="transparent")
-        # создаём 4 фрейм
-        self.negative_frame = CTkFrame(self, corner_radius=0,
-                                                   fg_color="transparent")
-        # создаём 5 фрейм
-        self.pozitive_frame = CTkFrame(self, corner_radius=0,
-                                                fg_color="transparent")
         # Настройка
         self.navigation_frame_label = CTkLabel(self.third_frame,
         text="Введите название достопремечательности и через / описание",
@@ -324,9 +328,9 @@ class App(CTk):
         # Главный фрейм
         self.select_frame_by_name(FRAMGL_NAME)
     def home_masive_install(self,sel):
-        global f
+        global LOGIN, f
         p = open('file(sgl)/Логин', 'r', encoding="UTF-8")
-        self.LOGIN = p.read()
+        LOGIN = p.read()
         opisenie_cursor.execute("SELECT name, description, location FROM cities")
         rows = opisenie_cursor.fetchall()
         f = 0
@@ -339,15 +343,26 @@ class App(CTk):
             opisenie_cursor.execute('SELECT name,description,location FROM cities')
             rows = opisenie_cursor.fetchall()
             for row in rows:
-                self.home_masive[i][0] = CTkLabel(sel, text=row[0])
-                self.home_masive[i][1] = CTkLabel(sel, text=row[1])
-                self.home_masive[i][2] = CTkLabel(sel, text=row[2])
-                self.home_masive[i][3] = CTkButton(sel, text='Уже был', command=self.biton_pozitive)
-                self.home_masive[i][4] = CTkButton(sel, text='Не хочу', command=self.biton_negetive)
+                if str(i + 1) not in read_all(LOGIN):
+                    self.home_masive[i][0] = CTkLabel(sel, text=row[0])
+                    self.home_masive[i][1] = CTkLabel(sel, text=row[1])
+                    self.home_masive[i][2] = CTkLabel(sel, text=row[2])
+                    self.home_masive[i][3] = CTkButton(sel, text='Уже был', command=self.biton_pozitive)
+                    self.home_masive[i][4] = CTkButton(sel, text='Не хочу', command=self.biton_negetive)
+                elif str(i + 1) in read_pozitive(LOGIN):
+                    self.home_masive[i][0] = CTkLabel(self.pozitive_frame, text=row[0])
+                    self.home_masive[i][1] = CTkLabel(self.pozitive_frame, text=row[1])
+                    self.home_masive[i][2] = CTkLabel(self.pozitive_frame, text=row[2])
+                    self.home_masive[i][3] = CTkButton(self.pozitive_frame, text='Вернуть')
+                else:
+                    self.home_masive[i][0] = CTkLabel(self.negative_frame, text=row[0])
+                    self.home_masive[i][1] = CTkLabel(self.negative_frame, text=row[1])
+                    self.home_masive[i][2] = CTkLabel(self.negative_frame, text=row[2])
+                    self.home_masive[i][3] = CTkButton(self.negative_frame, text='Вернуть')
         self.home_masive_grid(f)
     def biton_pozitive(self):
         self.home_masive_delite(tk_textbox,f)
-        self.pozitive = read_pozitive(self.LOGIN)
+        self.pozitive = read_pozitive(LOGIN)
         opisenie_cursor.execute('SELECT name,description,location FROM cities')
         rows = opisenie_cursor.fetchall()
         i = 0
@@ -360,29 +375,55 @@ class App(CTk):
         self.pozitive+=str(i+1)
         self.pozitive = json.dumps(self.pozitive)
         c.execute(f'UPDATE users SET array1 = ? WHERE login = ?'
-        , (self.pozitive, self.LOGIN))
+        , (self.pozitive, LOGIN))
         conn.commit()
         self.home_masive_grid(f)
-        self.pozitive = read_pozitive(self.LOGIN)
+        self.pozitive = read_pozitive(LOGIN)
     def biton_negetive(self):
-        ...
+        self.home_masive_delite(tk_textbox, f)
+        self.negative = read_negativ(LOGIN)
+        opisenie_cursor.execute('SELECT name,description,location FROM cities')
+        rows = opisenie_cursor.fetchall()
+        i = 0
+        for row in rows:
+            if self.home_masive[i][0].cget("text") == row[0] \
+                    and self.home_masive[i][1].cget("text") == row[1] \
+                    and self.home_masive[i][2].cget("text") == row[2]:
+                break
+            i += 1
+        self.negative += str(i + 1)
+        self.negative = json.dumps(self.negative)
+        c.execute(f'UPDATE users SET array2 = ? WHERE login = ?'
+                  , (self.negative, LOGIN))
+        conn.commit()
+        self.home_masive_grid(f)
+        self.negative = read_negativ(LOGIN)
     def home_masive_grid(self, f):
         for i in range(f):
-            if str(i+1) not in read_all(self.LOGIN):
+            if str(i+1) not in read_all(LOGIN):
                 self.home_masive[i][0].grid(row=i, column=0)
                 self.home_masive[i][1].grid(row=i, column=1)
                 self.home_masive[i][2].grid(row=i, column=2)
                 self.home_masive[i][3].grid(row=i, column=3)
                 self.home_masive[i][4].grid(row=i, column=4)
-    def home_masive_delite(self, sel, f):
+            else:
+                self.home_masive[i][0].grid(row=i, column=0)
+                self.home_masive[i][1].grid(row=i, column=1)
+                self.home_masive[i][2].grid(row=i, column=2)
+                self.home_masive[i][3].grid(row=i, column=3)
+    def home_masive_delite(self, f):
         for i in range(f):
-            if str(i) not in read_all(self.LOGIN):
-                self.home_masive.append(self.mas)
+            if str(i) not in read_all(LOGIN):
                 self.home_masive[i][0].destroy()
                 self.home_masive[i][1].destroy()
                 self.home_masive[i][2].destroy()
                 self.home_masive[i][3].destroy()
                 self.home_masive[i][4].destroy()
+            else:
+                self.home_masive[i][0].destroy()
+                self.home_masive[i][1].destroy()
+                self.home_masive[i][2].destroy()
+                self.home_masive[i][3].destroy()
     @staticmethod
     def change_appearance_mode_event(new_appearance_mode):
         if new_appearance_mode == 'Светлая':
@@ -394,14 +435,14 @@ class App(CTk):
     def avtor(self, password):
         if password == '':
             return 1
-        if self.LOGIN == '':
+        if LOGIN == '':
             return 1
 
         for file3 in read_login_pasvord():
-            if file3[0] == self.LOGIN:
+            if file3[0] == LOGIN:
                 if file3[1] == password:
                     p = open('file(sgl)/Логин', 'w', encoding="UTF-8")
-                    p.write(self.LOGIN)
+                    p.write(LOGIN)
                     p.close()
                     self.login_frame.grid_forget()
                     self.login_frame.grid(row=0, column=0, sticky="nsew", padx=100)
@@ -413,23 +454,24 @@ class App(CTk):
                         font=CTkFont(size=20, weight="bold"))
                     self.login_label1.grid(row=4, column=0)
                     return 1
-        add_user(self.LOGIN, password,['0'],['0'])
+        add_user(LOGIN, password,['0'],['0'])
         p = open('file(sgl)/Логин', 'w', encoding="UTF-8")
-        p.write(self.LOGIN)
+        p.write(LOGIN)
         self.login_label1.grid_forget()
         p.close()
         return 0
     def login_event(self):
+        global LOGIN
         self.login_label1 = CTkLabel(self.login_frame
             , text="",
              font=CTkFont(size=20, weight="bold"))
         self.login_label1.grid(row=4, column=0)
         p = open('file(sgl)/Логин', 'r', encoding="UTF-8")
         if p.read() == '':
-            self.LOGIN = self.username_entry.get()
+            LOGIN = self.username_entry.get()
             password = self.password_entry.get()
         else:
-            self.LOGIN = p.read()
+            LOGIN = p.read()
             p.close()
             return 0
         p.close()
