@@ -10,9 +10,10 @@ from globall import *
 def add_city(name):# Добавляем новый город в базу данных
     site.execute("INSERT INTO cities (name) VALUES (?)", (name,))
     site.commit()
-def add_city_opis(name, description, location):
+def add_city_opis(name, description, location, vid):
     # Добавляем новый город описание в базу данных
-    opisenie_cursor.execute("INSERT INTO cities (name, description, location) VALUES (?, ?, ?)", (name, description, location))
+    opisenie_cursor.execute("INSERT INTO cities (name, description, location, vid)"
+                            " VALUES (?, ?, ?, ?)", (name, description, location, vid))
 def check_city(name):# Проверяем наличие города в базе данных
     cursor = site.execute("SELECT name FROM cities WHERE name=?", (name,))
     city = cursor.fetchone()
@@ -75,12 +76,12 @@ opisenie_cursor.execute('''CREATE TABLE IF NOT EXISTS cities
              (id INTEGER PRIMARY KEY AUTOINCREMENT,
              name TEXT NOT NULL,
              description TEXT NOT NULL,
-             location TEXT NOT NULL);''')
+             location TEXT NOT NULL,
+             vid TEXT NOT NULL);''')
 # add_city_opis("Санкт-Петербург", "Город на Неве", "Северо-Западная Россия")
 # opisenie.commit()
 set_appearance_mode("light")
 set_default_color_theme("dark-blue")
-#print((read_negativ("фывывфывфывф")[0][1:-1]).replace(' ', '').split(','))
 class App(CTk):
     def __init__(self):
         super().__init__()
