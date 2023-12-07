@@ -54,7 +54,6 @@ def read_all(login):
     a.sort()
     return a
 
-
 conn = sqlite3.connect('file(sgl)/database.db')
 c = conn.cursor()
 c.execute('''
@@ -78,7 +77,7 @@ opisenie_cursor.execute('''CREATE TABLE IF NOT EXISTS cities
              description TEXT NOT NULL,
              location TEXT NOT NULL,
              vid TEXT NOT NULL);''')
-# add_city_opis("Санкт-Петербург", "Город на Неве", "Северо-Западная Россия")
+# add_city_opis("Санкт-Петербург", "Город на Неве", "Северо-Западная Россия", "вид")
 # opisenie.commit()
 set_appearance_mode("light")
 set_default_color_theme("dark-blue")
