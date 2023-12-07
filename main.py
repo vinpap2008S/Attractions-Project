@@ -77,7 +77,9 @@ opisenie_cursor.execute('''CREATE TABLE IF NOT EXISTS cities
              description TEXT NOT NULL,
              location TEXT NOT NULL,
              vid TEXT NOT NULL);''')
-# add_city_opis("Санкт-Петербург", "Город на Неве", "Северо-Западная Россия", "вид")
+#Красная площадь - историческое и культурное сердце Москвы, на которой расположены Кремль, Храм Василия Блаженного и Мавзолей Ленина.
+# add_city_opis("Москва", "Красная площадь", "историческое и культурное сердце Москвы, на которой расположены Кремль, Храм Василия Блаженного и Мавзолей Ленина.",
+#               "иторическая ценность")
 # opisenie.commit()
 set_appearance_mode("light")
 set_default_color_theme("dark-blue")
@@ -299,10 +301,58 @@ class App(CTk):
         # создаём 4 фрейм
         self.pozitive_frame = CTkFrame(self, corner_radius=0,
                                                    fg_color="transparent")
+        self.pozitive_frame_Lable = CTkLabel(self.pozitive_frame,
+                                  text='В этих местах я уже был',
+                                  font=CTkFont(size=30, weight="bold"))
+        self.pozitive_frame_Lable.grid()
+        self.pozitive_frame_None = CTkLabel(self.pozitive_frame,
+                                  text='', )
+        self.pozitive_frame_None.grid(row=1, column=0)
+        self.pozitive_frame_None = CTkLabel(self.pozitive_frame,
+                                            text='', )
+        self.pozitive_frame_None.grid(row=2, column=0)
+        self.pozitive_frame_None = CTkLabel(self.pozitive_frame,
+                                            text='', )
+        self.pozitive_frame_None.grid(row=3, column=0)
+
+
         # создаём 5 фрейм
         self.negative_frame = CTkFrame(self, corner_radius=0,
                                                 fg_color="transparent")
-        global tk_textbox
+        self.negative_frame_Lable = CTkLabel(self.negative_frame,
+                                  text='В этих местах я не хочу быть',
+                                  font=CTkFont(size=30, weight="bold"))
+        self.negative_frame_Lable.grid()
+        self.pozitive_frame_None = CTkLabel(self.negative_frame,
+                                            text='', )
+        self.pozitive_frame_None.grid(row=1, column=0)
+        self.pozitive_frame_None = CTkLabel(self.negative_frame,
+                                            text='', )
+        self.pozitive_frame_None.grid(row=2, column=0)
+        self.pozitive_frame_None = CTkLabel(self.negative_frame,
+                                            text='', )
+        self.pozitive_frame_None.grid(row=3, column=0)
+        self.pozitive_frame.grid_columnconfigure(0, weight=1)
+        self.negative_frame.grid_columnconfigure(0, weight=1)
+        global tk_textbox,tk_textbox_pozitive,tk_textbox_negative
+        self.tk_textbox_pozitive = CTkScrollableFrame(self.pozitive_frame,
+                                        height=screen_height - 250)
+        self.tk_textbox_pozitive.grid(sticky="nsew")
+        self.tk_textbox_pozitive.grid_columnconfigure(0, weight=1)
+        self.tk_textbox_pozitive.grid_columnconfigure(1, weight=1)
+        self.tk_textbox_pozitive.grid_columnconfigure(2, weight=1)
+        self.tk_textbox_pozitive.grid_columnconfigure(3, weight=1)
+        self.tk_textbox_pozitive.grid_columnconfigure(4, weight=1)
+
+        self.tk_textbox_negative = CTkScrollableFrame(self.negative_frame,
+                                        height=screen_height - 250)
+        self.tk_textbox_negative.grid(sticky="nsew")
+        self.tk_textbox_negative.grid_columnconfigure(0, weight=1)
+        self.tk_textbox_negative.grid_columnconfigure(1, weight=1)
+        self.tk_textbox_negative.grid_columnconfigure(2, weight=1)
+        self.tk_textbox_negative.grid_columnconfigure(3, weight=1)
+        self.tk_textbox_negative.grid_columnconfigure(4, weight=1)
+
         tk_textbox = CTkScrollableFrame(self.home_frame,
                                 height=screen_height-250)
         tk_textbox.grid(row=5, column=0, sticky="nsew")
@@ -315,7 +365,7 @@ class App(CTk):
         self.home_masive_install(tk_textbox)
         # Настройка
         self.navigation_frame_label = CTkLabel(self.third_frame,
-        text="Введите название достопремечательности и через / описание",
+        text="В доработке",
         font=CTkFont(size=30, weight="bold"))
         self.navigation_frame_label.grid(padx=200, pady=100)
         self.home_frame_frame_2_entry = CTkEntry(
@@ -340,7 +390,7 @@ class App(CTk):
         self.mas = [1,2,3,4,5,6]
         for i in range(f):
             self.home_masive.append(self.mas)
-            opisenie_cursor.execute('SELECT name,description,location FROM cities')
+            opisenie_cursor.execute('SELECT name,description,location,vid FROM cities')
             rows = opisenie_cursor.fetchall()
             for row in rows:
                 if str(i + 1) not in read_all(LOGIN):
@@ -351,20 +401,20 @@ class App(CTk):
                     self.home_masive[i][4] = CTkButton(sel, text='Уже был', command=self.biton_pozitive)
                     self.home_masive[i][5] = CTkButton(sel, text='Не хочу', command=self.biton_negetive)
                 elif str(i + 1) in read_pozitive(LOGIN):
-                    self.home_masive[i][0] = CTkLabel(self.pozitive_frame, text=row[0])
-                    self.home_masive[i][1] = CTkLabel(self.pozitive_frame, text=row[1])
-                    self.home_masive[i][2] = CTkLabel(self.pozitive_frame, text=row[2])
-                    self.home_masive[i][3] = CTkLabel(self.pozitive_frame, text=row[3])
-                    self.home_masive[i][4] = CTkButton(self.pozitive_frame, text='Вернуть')
+                    self.home_masive[i][0] = CTkLabel(self.tk_textbox_pozitive, text=row[0])
+                    self.home_masive[i][1] = CTkLabel(self.tk_textbox_pozitive, text=row[1])
+                    self.home_masive[i][2] = CTkLabel(self.tk_textbox_pozitive, text=row[2])
+                    self.home_masive[i][3] = CTkLabel(self.tk_textbox_pozitive, text=row[3])
+                    self.home_masive[i][4] = CTkButton(self.tk_textbox_pozitive, text='Вернуть')
                 else:
-                    self.home_masive[i][0] = CTkLabel(self.pozitive_frame, text=row[0])
-                    self.home_masive[i][1] = CTkLabel(self.pozitive_frame, text=row[1])
-                    self.home_masive[i][2] = CTkLabel(self.pozitive_frame, text=row[2])
-                    self.home_masive[i][3] = CTkLabel(self.pozitive_frame, text=row[3])
-                    self.home_masive[i][4] = CTkButton(self.pozitive_frame, text='Вернуть')
+                    self.home_masive[i][0] = CTkLabel(self.tk_textbox_negative, text=row[0])
+                    self.home_masive[i][1] = CTkLabel(self.tk_textbox_negative, text=row[1])
+                    self.home_masive[i][2] = CTkLabel(self.tk_textbox_negative, text=row[2])
+                    self.home_masive[i][3] = CTkLabel(self.tk_textbox_negative, text=row[3])
+                    self.home_masive[i][4] = CTkButton(self.tk_textbox_negative, text='Вернуть')
         self.home_masive_grid(f)
     def biton_pozitive(self):
-        self.home_masive_delite(tk_textbox,f)
+        self.home_masive_delite(f)
         self.pozitive = read_pozitive(LOGIN)
         opisenie_cursor.execute('SELECT name,description,location FROM cities')
         rows = opisenie_cursor.fetchall()
@@ -383,7 +433,7 @@ class App(CTk):
         self.home_masive_grid(f)
         self.pozitive = read_pozitive(LOGIN)
     def biton_negetive(self):
-        self.home_masive_delite(tk_textbox, f)
+        self.home_masive_delite(f)
         self.negative = read_negativ(LOGIN)
         opisenie_cursor.execute('SELECT name,description,location FROM cities')
         rows = opisenie_cursor.fetchall()
@@ -409,7 +459,7 @@ class App(CTk):
                 self.home_masive[i][2].grid(row=i, column=2)
                 self.home_masive[i][3].grid(row=i, column=3)
                 self.home_masive[i][4].grid(row=i, column=4)
-                self.home_masive[i][5].grid(row=i, column=4)
+                self.home_masive[i][5].grid(row=i, column=5)
             else:
                 self.home_masive[i][0].grid(row=i, column=0)
                 self.home_masive[i][1].grid(row=i, column=1)
@@ -424,11 +474,13 @@ class App(CTk):
                 self.home_masive[i][2].destroy()
                 self.home_masive[i][3].destroy()
                 self.home_masive[i][4].destroy()
+                self.home_masive[i][5].destroy()
             else:
                 self.home_masive[i][0].destroy()
                 self.home_masive[i][1].destroy()
                 self.home_masive[i][2].destroy()
                 self.home_masive[i][3].destroy()
+                self.home_masive[i][4].destroy()
     @staticmethod
     def change_appearance_mode_event(new_appearance_mode):
         if new_appearance_mode == 'Светлая':
