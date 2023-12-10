@@ -50,7 +50,7 @@ def read_pozitive(login):
     rows = json.loads(rows[0][0])
     return rows
 def read_all(login):
-    a =list(read_negativ(login)+read_pozitive(login))
+    a = list(read_negativ(login)+read_pozitive(login))
     a.sort()
     return a
 
@@ -59,10 +59,10 @@ c = conn.cursor()
 c.execute('''
     CREATE TABLE IF NOT EXISTS users
              (id INTEGER PRIMARY KEY AUTOINCREMENT,
-              login TEXT,
-              password TEXT,
-              array1 TEXT,
-              array2 TEXT
+              login TEXT NOT NULL,
+              password TEXT NOT NULL,
+              array1 TEXT NOT NULL,
+              array2 TEXT NOT NULL
     )
 ''')
 site = sqlite3.connect('file(sgl)/cities.db')
@@ -353,16 +353,16 @@ class App(CTk):
         self.tk_textbox_negative.grid_columnconfigure(3, weight=1)
         self.tk_textbox_negative.grid_columnconfigure(4, weight=1)
 
-        tk_textbox = CTkScrollableFrame(self.home_frame,
+        self.tk_textbox = CTkScrollableFrame(self.home_frame,
                                 height=screen_height-250)
-        tk_textbox.grid(row=5, column=0, sticky="nsew")
-        tk_textbox.grid_columnconfigure(0, weight=1)
-        tk_textbox.grid_columnconfigure(1, weight=1)
-        tk_textbox.grid_columnconfigure(2, weight=1)
-        tk_textbox.grid_columnconfigure(3, weight=1)
-        tk_textbox.grid_columnconfigure(4, weight=1)
-        tk_textbox.grid_columnconfigure(5, weight=1)
-        self.home_masive_install(tk_textbox)
+        self.tk_textbox.grid(row=5, column=0, sticky="nsew")
+        self.tk_textbox.grid_columnconfigure(0, weight=1)
+        self.tk_textbox.grid_columnconfigure(1, weight=1)
+        self.tk_textbox.grid_columnconfigure(2, weight=1)
+        self.tk_textbox.grid_columnconfigure(3, weight=1)
+        self.tk_textbox.grid_columnconfigure(4, weight=1)
+        self.tk_textbox.grid_columnconfigure(5, weight=1)
+        self.home_masive_install()
         # Настройка
         self.navigation_frame_label = CTkLabel(self.third_frame,
         text="В доработке",
@@ -377,7 +377,7 @@ class App(CTk):
         self.bitin_2frame.grid(row=2, column=0, padx=200, pady=10)
         # Главный фрейм
         self.select_frame_by_name(FRAMGL_NAME)
-    def home_masive_install(self,sel):
+    def home_masive_install(self):
         global LOGIN, f
         p = open('file(sgl)/Логин', 'r', encoding="UTF-8")
         LOGIN = p.read()
@@ -394,25 +394,67 @@ class App(CTk):
             rows = opisenie_cursor.fetchall()
             for row in rows:
                 if str(i + 1) not in read_all(LOGIN):
-                    self.home_masive[i][0] = CTkLabel(sel, text=row[0])
-                    self.home_masive[i][1] = CTkLabel(sel, text=row[1])
-                    self.home_masive[i][2] = CTkLabel(sel, text=row[2])
-                    self.home_masive[i][3] = CTkLabel(sel, text=row[3])
-                    self.home_masive[i][4] = CTkButton(sel, text='Уже был', command=self.biton_pozitive)
-                    self.home_masive[i][5] = CTkButton(sel, text='Не хочу', command=self.biton_negetive)
+                    self.home_masive[i][0] = CTkLabel(self.tk_textbox, text=row[0])
+                    self.home_masive[i][1] = CTkLabel(self.tk_textbox, text=row[1])
+                    self.home_masive[i][2] = CTkLabel(self.tk_textbox, text=row[2])
+                    self.home_masive[i][3] = CTkLabel(self.tk_textbox, text=row[3])
+                    self.home_masive[i][4] = CTkButton(self.tk_textbox, text='Уже был', command=self.biton_pozitive)
+                    self.home_masive[i][5] = CTkButton(self.tk_textbox, text='Не хочу', command=self.biton_negetive)
                 elif str(i + 1) in read_pozitive(LOGIN):
                     self.home_masive[i][0] = CTkLabel(self.tk_textbox_pozitive, text=row[0])
                     self.home_masive[i][1] = CTkLabel(self.tk_textbox_pozitive, text=row[1])
                     self.home_masive[i][2] = CTkLabel(self.tk_textbox_pozitive, text=row[2])
                     self.home_masive[i][3] = CTkLabel(self.tk_textbox_pozitive, text=row[3])
-                    self.home_masive[i][4] = CTkButton(self.tk_textbox_pozitive, text='Вернуть')
+                    self.home_masive[i][4] = CTkButton(self.tk_textbox_pozitive, text='Вернуть',command=self.recers_pozitive)
                 else:
                     self.home_masive[i][0] = CTkLabel(self.tk_textbox_negative, text=row[0])
                     self.home_masive[i][1] = CTkLabel(self.tk_textbox_negative, text=row[1])
                     self.home_masive[i][2] = CTkLabel(self.tk_textbox_negative, text=row[2])
                     self.home_masive[i][3] = CTkLabel(self.tk_textbox_negative, text=row[3])
-                    self.home_masive[i][4] = CTkButton(self.tk_textbox_negative, text='Вернуть')
+                    self.home_masive[i][4] = CTkButton(self.tk_textbox_negative, text='Вернуть',command=self.recers_negative)
         self.home_masive_grid(f)
+    def recers_pozitive(self):
+        global LOGIN
+        self.home_masive_delite(f)
+        self.pozitive = read_pozitive(LOGIN)
+        opisenie_cursor.execute('SELECT name,description,location FROM cities')
+        rows = opisenie_cursor.fetchall()
+        i = 0
+        for row in rows:
+            if self.home_masive[i][0].cget("text") == row[0] \
+                    and self.home_masive[i][1].cget("text") == row[1] \
+                    and self.home_masive[i][2].cget("text") == row[2]:
+                break
+            i += 1
+        self.pozitive.remove(str(i+1))
+        self.pozitive = json.dumps(self.pozitive)
+        c.execute(f'UPDATE users SET array1 = ? WHERE login = ?'
+                 , (self.pozitive, LOGIN))
+        conn.commit()
+        self.home_masive_install()
+        self.home_masive_grid(f)
+        self.pozitive = read_pozitive(LOGIN)
+    def recers_negative(self):
+        global LOGIN
+        self.home_masive_delite(f)
+        self.negative = read_negativ(LOGIN)
+        opisenie_cursor.execute('SELECT name,description,location FROM cities')
+        rows = opisenie_cursor.fetchall()
+        i = 0
+        for row in rows:
+            if self.home_masive[i][0].cget("text") == row[0] \
+                    and self.home_masive[i][1].cget("text") == row[1] \
+                    and self.home_masive[i][2].cget("text") == row[2]:
+                break
+            i += 1
+        self.negative.remove(str(i+1))
+        self.negative = json.dumps(self.negative)
+        c.execute(f'UPDATE users SET array2 = ? WHERE login = ?'
+                 , (self.negative, LOGIN))
+        conn.commit()
+        self.home_masive_install()
+        self.home_masive_grid(f)
+        self.negative = read_negativ(LOGIN)
     def biton_pozitive(self):
         self.home_masive_delite(f)
         self.pozitive = read_pozitive(LOGIN)
@@ -430,6 +472,7 @@ class App(CTk):
         c.execute(f'UPDATE users SET array1 = ? WHERE login = ?'
         , (self.pozitive, LOGIN))
         conn.commit()
+        self.home_masive_install()
         self.home_masive_grid(f)
         self.pozitive = read_pozitive(LOGIN)
     def biton_negetive(self):
@@ -449,26 +492,21 @@ class App(CTk):
         c.execute(f'UPDATE users SET array2 = ? WHERE login = ?'
                   , (self.negative, LOGIN))
         conn.commit()
+        self.home_masive_install()
         self.home_masive_grid(f)
         self.negative = read_negativ(LOGIN)
     def home_masive_grid(self, f):
         for i in range(f):
+            self.home_masive[i][0].grid(row=i, column=0)
+            self.home_masive[i][1].grid(row=i, column=1)
+            self.home_masive[i][2].grid(row=i, column=2)
+            self.home_masive[i][3].grid(row=i, column=3)
+            self.home_masive[i][4].grid(row=i, column=4)
             if str(i+1) not in read_all(LOGIN):
-                self.home_masive[i][0].grid(row=i, column=0)
-                self.home_masive[i][1].grid(row=i, column=1)
-                self.home_masive[i][2].grid(row=i, column=2)
-                self.home_masive[i][3].grid(row=i, column=3)
-                self.home_masive[i][4].grid(row=i, column=4)
                 self.home_masive[i][5].grid(row=i, column=5)
-            else:
-                self.home_masive[i][0].grid(row=i, column=0)
-                self.home_masive[i][1].grid(row=i, column=1)
-                self.home_masive[i][2].grid(row=i, column=2)
-                self.home_masive[i][3].grid(row=i, column=3)
-                self.home_masive[i][4].grid(row=i, column=4)
     def home_masive_delite(self, f):
         for i in range(f):
-            if str(i) not in read_all(LOGIN):
+            if str(i+1) not in read_all(LOGIN):
                 self.home_masive[i][0].destroy()
                 self.home_masive[i][1].destroy()
                 self.home_masive[i][2].destroy()
