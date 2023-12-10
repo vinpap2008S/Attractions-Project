@@ -279,9 +279,9 @@ class App(CTk):
         self.home_None.grid(row=3, column=0)
 
         self.home_Lable_all = CTkLabel(self.home_frame,
-        text='Город            Название'
-             '              Описание                 Уже был       '
-             '             Не хочу быть',
+        text='Город         Название'
+             '                           Описание                                 Уже был   '
+             '      Не хочу быть',
             font=CTkFont(size=30, weight="bold"))
         self.home_Lable_all.grid(row=4, column=0)
 
