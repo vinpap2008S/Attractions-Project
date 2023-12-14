@@ -5,6 +5,10 @@ FRAM3_NAME = "Уже был"
 FRAM4_NAME = "Не хочу быть"
 import sqlite3
 g = 0
+def add_city_opis(name, description, location, vid):
+    # Добавляем новый город описание в базу данных
+    opisenie_cursor.execute("INSERT INTO cities (name, description, location, vid)"
+                            " VALUES (?, ?, ?, ?)", (name, description, location, vid))
 if g:
     opisenie = sqlite3.connect('file(sgl)/opisenie.db')
     opisenie_cursor = opisenie.cursor()

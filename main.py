@@ -81,6 +81,7 @@ opisenie_cursor.execute('''CREATE TABLE IF NOT EXISTS cities
 # add_city_opis("Москва", "Красная площадь", "историческое и культурное сердце Москвы, на которой расположены Кремль, Храм Василия Блаженного и Мавзолей Ленина.",
 #               "иторическая ценность")
 # opisenie.commit()
+print(read_all("vinpap2008"))
 set_appearance_mode("light")
 set_default_color_theme("dark-blue")
 class App(CTk):
@@ -406,12 +407,14 @@ class App(CTk):
                     self.home_masive[i][2] = CTkLabel(self.tk_textbox_pozitive, text=row[2])
                     self.home_masive[i][3] = CTkLabel(self.tk_textbox_pozitive, text=row[3])
                     self.home_masive[i][4] = CTkButton(self.tk_textbox_pozitive, text='Вернуть',command=self.recers_pozitive)
+                    self.home_masive[i][5] = CTkLabel(self.tk_textbox_pozitive, text='')
                 else:
                     self.home_masive[i][0] = CTkLabel(self.tk_textbox_negative, text=row[0])
                     self.home_masive[i][1] = CTkLabel(self.tk_textbox_negative, text=row[1])
                     self.home_masive[i][2] = CTkLabel(self.tk_textbox_negative, text=row[2])
                     self.home_masive[i][3] = CTkLabel(self.tk_textbox_negative, text=row[3])
                     self.home_masive[i][4] = CTkButton(self.tk_textbox_negative, text='Вернуть',command=self.recers_negative)
+                    self.home_masive[i][5] = CTkLabel(self.tk_textbox_negative, text='')
         self.home_masive_grid(f)
     def recers_pozitive(self):
         global LOGIN
@@ -503,6 +506,7 @@ class App(CTk):
             self.home_masive[i][3].grid(row=i, column=3)
             self.home_masive[i][4].grid(row=i, column=4)
             if str(i+1) not in read_all(LOGIN):
+                print(i)
                 self.home_masive[i][5].grid(row=i, column=5)
     def home_masive_delite(self, f):
         for i in range(f):
