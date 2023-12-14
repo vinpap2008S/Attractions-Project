@@ -81,7 +81,6 @@ opisenie_cursor.execute('''CREATE TABLE IF NOT EXISTS cities
 # add_city_opis("Москва", "Красная площадь", "историческое и культурное сердце Москвы, на которой расположены Кремль, Храм Василия Блаженного и Мавзолей Ленина.",
 #               "иторическая ценность")
 # opisenie.commit()
-print(read_all("vinpap2008"))
 set_appearance_mode("light")
 set_default_color_theme("dark-blue")
 class App(CTk):
@@ -154,7 +153,6 @@ class App(CTk):
         if name == FRAM3_NAME else "transparent")
         self.frame_5_button.configure(fg_color=("gray75", "gray25")
         if name == FRAM4_NAME else "transparent")
-        # Показ выбранного
         if name == FRAMGL_NAME:
             self.home_frame.grid(row=0, column=1, sticky="nsew")
         else:
@@ -382,7 +380,7 @@ class App(CTk):
         global LOGIN, f
         p = open('file(sgl)/Логин', 'r', encoding="UTF-8")
         LOGIN = p.read()
-        opisenie_cursor.execute("SELECT name, description, location FROM cities")
+        opisenie_cursor.execute('SELECT name,description,location,vid FROM cities')
         rows = opisenie_cursor.fetchall()
         f = 0
         for _ in rows:
@@ -391,8 +389,6 @@ class App(CTk):
         self.mas = [1,2,3,4,5,6]
         for i in range(f):
             self.home_masive.append(self.mas)
-            opisenie_cursor.execute('SELECT name,description,location,vid FROM cities')
-            rows = opisenie_cursor.fetchall()
             for row in rows:
                 if str(i + 1) not in read_all(LOGIN):
                     self.home_masive[i][0] = CTkLabel(self.tk_textbox, text=row[0])
@@ -506,23 +502,15 @@ class App(CTk):
             self.home_masive[i][3].grid(row=i, column=3)
             self.home_masive[i][4].grid(row=i, column=4)
             if str(i+1) not in read_all(LOGIN):
-                print(i)
                 self.home_masive[i][5].grid(row=i, column=5)
     def home_masive_delite(self, f):
         for i in range(f):
-            if str(i+1) not in read_all(LOGIN):
-                self.home_masive[i][0].destroy()
-                self.home_masive[i][1].destroy()
-                self.home_masive[i][2].destroy()
-                self.home_masive[i][3].destroy()
-                self.home_masive[i][4].destroy()
-                self.home_masive[i][5].destroy()
-            else:
-                self.home_masive[i][0].destroy()
-                self.home_masive[i][1].destroy()
-                self.home_masive[i][2].destroy()
-                self.home_masive[i][3].destroy()
-                self.home_masive[i][4].destroy()
+            self.home_masive[i][0].destroy()
+            self.home_masive[i][1].destroy()
+            self.home_masive[i][2].destroy()
+            self.home_masive[i][3].destroy()
+            self.home_masive[i][4].destroy()
+            self.home_masive[i][5].destroy()
     @staticmethod
     def change_appearance_mode_event(new_appearance_mode):
         if new_appearance_mode == 'Светлая':
