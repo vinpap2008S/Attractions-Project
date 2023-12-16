@@ -386,31 +386,32 @@ class App(CTk):
         for _ in rows:
             f += 1
         self.home_masive = []
-        self.mas = [1,2,3,4,5,6]
-        for i in range(f):
+        i = 0
+        for row in rows:
+            self.mas = [1,2,3,4,5,6]
             self.home_masive.append(self.mas)
-            for row in rows:
-                if str(i + 1) not in read_all(LOGIN):
-                    self.home_masive[i][0] = CTkLabel(self.tk_textbox, text=row[0])
-                    self.home_masive[i][1] = CTkLabel(self.tk_textbox, text=row[1])
-                    self.home_masive[i][2] = CTkLabel(self.tk_textbox, text=row[2])
-                    self.home_masive[i][3] = CTkLabel(self.tk_textbox, text=row[3])
-                    self.home_masive[i][4] = CTkButton(self.tk_textbox, text='Уже был', command=self.biton_pozitive)
-                    self.home_masive[i][5] = CTkButton(self.tk_textbox, text='Не хочу', command=self.biton_negetive)
-                elif str(i + 1) in read_pozitive(LOGIN):
-                    self.home_masive[i][0] = CTkLabel(self.tk_textbox_pozitive, text=row[0])
-                    self.home_masive[i][1] = CTkLabel(self.tk_textbox_pozitive, text=row[1])
-                    self.home_masive[i][2] = CTkLabel(self.tk_textbox_pozitive, text=row[2])
-                    self.home_masive[i][3] = CTkLabel(self.tk_textbox_pozitive, text=row[3])
-                    self.home_masive[i][4] = CTkButton(self.tk_textbox_pozitive, text='Вернуть',command=self.recers_pozitive)
-                    self.home_masive[i][5] = CTkLabel(self.tk_textbox_pozitive, text='')
-                else:
-                    self.home_masive[i][0] = CTkLabel(self.tk_textbox_negative, text=row[0])
-                    self.home_masive[i][1] = CTkLabel(self.tk_textbox_negative, text=row[1])
-                    self.home_masive[i][2] = CTkLabel(self.tk_textbox_negative, text=row[2])
-                    self.home_masive[i][3] = CTkLabel(self.tk_textbox_negative, text=row[3])
-                    self.home_masive[i][4] = CTkButton(self.tk_textbox_negative, text='Вернуть',command=self.recers_negative)
-                    self.home_masive[i][5] = CTkLabel(self.tk_textbox_negative, text='')
+            if str(i + 1) not in read_all(LOGIN):
+                self.home_masive[i][0] = CTkLabel(self.tk_textbox, text=row[0])
+                self.home_masive[i][1] = CTkLabel(self.tk_textbox, text=row[1])
+                self.home_masive[i][2] = CTkLabel(self.tk_textbox, text=row[2])
+                self.home_masive[i][3] = CTkLabel(self.tk_textbox, text=row[3])
+                self.home_masive[i][4] = CTkButton(self.tk_textbox, text='Уже был', command=self.biton_pozitive)
+                self.home_masive[i][5] = CTkButton(self.tk_textbox, text='Не хочу', command=self.biton_negetive)
+            elif str(i + 1) in read_pozitive(LOGIN):
+                self.home_masive[i][0] = CTkLabel(self.tk_textbox_pozitive, text=row[0])
+                self.home_masive[i][1] = CTkLabel(self.tk_textbox_pozitive, text=row[1])
+                self.home_masive[i][2] = CTkLabel(self.tk_textbox_pozitive, text=row[2])
+                self.home_masive[i][3] = CTkLabel(self.tk_textbox_pozitive, text=row[3])
+                self.home_masive[i][4] = CTkButton(self.tk_textbox_pozitive, text='Вернуть',command=self.recers_pozitive)
+                self.home_masive[i][5] = CTkLabel(self.tk_textbox_pozitive, text='')
+            else:
+                self.home_masive[i][0] = CTkLabel(self.tk_textbox_negative, text=row[0])
+                self.home_masive[i][1] = CTkLabel(self.tk_textbox_negative, text=row[1])
+                self.home_masive[i][2] = CTkLabel(self.tk_textbox_negative, text=row[2])
+                self.home_masive[i][3] = CTkLabel(self.tk_textbox_negative, text=row[3])
+                self.home_masive[i][4] = CTkButton(self.tk_textbox_negative, text='Вернуть',command=self.recers_negative)
+                self.home_masive[i][5] = CTkLabel(self.tk_textbox_negative, text='')
+            i+=1
         self.home_masive_grid(f)
     def recers_pozitive(self):
         global LOGIN
@@ -448,8 +449,8 @@ class App(CTk):
             i += 1
         self.negative.remove(str(i+1))
         self.negative = json.dumps(self.negative)
-        c.execute(f'UPDATE users SET array2 = ? WHERE login = ?'
-                 , (self.negative, LOGIN))
+        c.execute(f'UPDATE users SET array2 = ? WHERE login = ?',
+        (self.negative, LOGIN))
         conn.commit()
         self.home_masive_install()
         self.home_masive_grid(f)
@@ -496,6 +497,7 @@ class App(CTk):
         self.negative = read_negativ(LOGIN)
     def home_masive_grid(self, f):
         for i in range(f):
+            print(i)
             self.home_masive[i][0].grid(row=i, column=0)
             self.home_masive[i][1].grid(row=i, column=1)
             self.home_masive[i][2].grid(row=i, column=2)
