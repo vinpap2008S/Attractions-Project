@@ -4,6 +4,7 @@ import os
 import sqlite3
 import json
 
+import tkinter
 from customtkinter import *
 
 from globall import *
@@ -387,6 +388,8 @@ class App(CTk):
             f += 1
         self.home_masive = []
         i = 0
+        self.radio_var_poz = tkinter.IntVar(value=0)
+        self.radio_var_neg = tkinter.IntVar(value=0)
         for row in rows:
             self.mas = [1,2,3,4,5,6]
             self.home_masive.append(self.mas)
@@ -395,8 +398,10 @@ class App(CTk):
                 self.home_masive[i][1] = CTkLabel(self.tk_textbox, text=row[1])
                 self.home_masive[i][2] = CTkLabel(self.tk_textbox, text=row[2])
                 self.home_masive[i][3] = CTkLabel(self.tk_textbox, text=row[3])
-                self.home_masive[i][4] = CTkButton(self.tk_textbox, text='Уже был', command=self.biton_pozitive)
-                self.home_masive[i][5] = CTkButton(self.tk_textbox, text='Не хочу', command=self.biton_negetive)
+                self.home_masive[i][4] = CTkRadioButton(self.tk_textbox,text='',
+                                                        command=self.biton_pozitive, variable=self.radio_var_poz, value=i+1)
+                self.home_masive[i][5] = CTkRadioButton(self.tk_textbox,text='',
+                                                        command=self.biton_negetive, variable=self.radio_var_neg, value=i+1)
             elif str(i + 1) in read_pozitive(LOGIN):
                 self.home_masive[i][0] = CTkLabel(self.tk_textbox_pozitive, text=row[0])
                 self.home_masive[i][1] = CTkLabel(self.tk_textbox_pozitive, text=row[1])
@@ -418,18 +423,10 @@ class App(CTk):
         self.home_masive_delite(f)
         self.pozitive = read_pozitive(LOGIN)
         opisenie_cursor.execute('SELECT name,description,location FROM cities')
-        rows = opisenie_cursor.fetchall()
-        i = 0
-        for row in rows:
-            if self.home_masive[i][0].cget("text") == row[0] \
-                    and self.home_masive[i][1].cget("text") == row[1] \
-                    and self.home_masive[i][2].cget("text") == row[2]:
-                break
-            i += 1
-        self.pozitive.remove(str(i+1))
+        self.pozitive.remove(str(self.radio_var_poz.get()))
         self.pozitive = json.dumps(self.pozitive)
-        c.execute(f'UPDATE users SET array1 = ? WHERE login = ?'
-                 , (self.pozitive, LOGIN))
+        c.execute(f'UPDATE users SET array1 = ? WHERE login = ?',
+        (self.pozitive, LOGIN))
         conn.commit()
         self.home_masive_install()
         self.home_masive_grid(f)
@@ -439,15 +436,7 @@ class App(CTk):
         self.home_masive_delite(f)
         self.negative = read_negativ(LOGIN)
         opisenie_cursor.execute('SELECT name,description,location FROM cities')
-        rows = opisenie_cursor.fetchall()
-        i = 0
-        for row in rows:
-            if self.home_masive[i][0].cget("text") == row[0] \
-                    and self.home_masive[i][1].cget("text") == row[1] \
-                    and self.home_masive[i][2].cget("text") == row[2]:
-                break
-            i += 1
-        self.negative.remove(str(i+1))
+        self.negative.remove(str(self.radio_var_neg.get()))
         self.negative = json.dumps(self.negative)
         c.execute(f'UPDATE users SET array2 = ? WHERE login = ?',
         (self.negative, LOGIN))
@@ -459,15 +448,7 @@ class App(CTk):
         self.home_masive_delite(f)
         self.pozitive = read_pozitive(LOGIN)
         opisenie_cursor.execute('SELECT name,description,location FROM cities')
-        rows = opisenie_cursor.fetchall()
-        i = 0
-        for row in rows:
-            if self.home_masive[i][0].cget("text") == row[0]\
-                and self.home_masive[i][1].cget("text") == row[1] \
-                and self.home_masive[i][2].cget("text") == row[2]:
-                break
-            i+=1
-        self.pozitive+=str(i+1)
+        self.pozitive += str(self.radio_var_poz.get())
         self.pozitive = json.dumps(self.pozitive)
         c.execute(f'UPDATE users SET array1 = ? WHERE login = ?'
         , (self.pozitive, LOGIN))
@@ -480,14 +461,7 @@ class App(CTk):
         self.negative = read_negativ(LOGIN)
         opisenie_cursor.execute('SELECT name,description,location FROM cities')
         rows = opisenie_cursor.fetchall()
-        i = 0
-        for row in rows:
-            if self.home_masive[i][0].cget("text") == row[0] \
-                    and self.home_masive[i][1].cget("text") == row[1] \
-                    and self.home_masive[i][2].cget("text") == row[2]:
-                break
-            i += 1
-        self.negative += str(i + 1)
+        self.negative += str(self.radio_var_neg.get())
         self.negative = json.dumps(self.negative)
         c.execute(f'UPDATE users SET array2 = ? WHERE login = ?'
                   , (self.negative, LOGIN))
@@ -497,7 +471,6 @@ class App(CTk):
         self.negative = read_negativ(LOGIN)
     def home_masive_grid(self, f):
         for i in range(f):
-            print(i)
             self.home_masive[i][0].grid(row=i, column=0)
             self.home_masive[i][1].grid(row=i, column=1)
             self.home_masive[i][2].grid(row=i, column=2)
