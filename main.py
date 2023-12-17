@@ -279,9 +279,7 @@ class App(CTk):
         self.home_None.grid(row=3, column=0)
 
         self.home_Lable_all = CTkLabel(self.home_frame,
-        text='Город         Название'
-             '                           Описание                                 Уже был   '
-             '      Не хочу быть',
+        text='Город        Название                         Описание                  Вид           Уже был         Не хочу быть',
             font=CTkFont(size=30, weight="bold"))
         self.home_Lable_all.grid(row=4, column=0)
 
@@ -390,6 +388,10 @@ class App(CTk):
         i = 0
         self.radio_var_poz = tkinter.IntVar(value=0)
         self.radio_var_neg = tkinter.IntVar(value=0)
+        rows = [['Радужный(Ханты-Мансийсы)',# 24
+                 'Радужный(Ханты-Мансийсы)аа', # 26
+                 'Радужный(Ханты-Мансийский автономный округ)Радужный(Ханты-Мансийскввввввввввааааааапппппаааааааа',
+                 'исторические памятники']]# 22 # исторические памятники, здания, природные объекты, парки, музеи, скульптуры, монастыри, храмы
         for row in rows:
             self.mas = [1,2,3,4,5,6]
             self.home_masive.append(self.mas)
@@ -398,23 +400,25 @@ class App(CTk):
                 self.home_masive[i][1] = CTkLabel(self.tk_textbox, text=row[1])
                 self.home_masive[i][2] = CTkLabel(self.tk_textbox, text=row[2])
                 self.home_masive[i][3] = CTkLabel(self.tk_textbox, text=row[3])
-                self.home_masive[i][4] = CTkRadioButton(self.tk_textbox,text='',
+                self.home_masive[i][4] = CTkRadioButton(self.tk_textbox,text='',width=0,
                                                         command=self.biton_pozitive, variable=self.radio_var_poz, value=i+1)
-                self.home_masive[i][5] = CTkRadioButton(self.tk_textbox,text='',
+                self.home_masive[i][5] = CTkRadioButton(self.tk_textbox,text='',width=0,
                                                         command=self.biton_negetive, variable=self.radio_var_neg, value=i+1)
             elif str(i + 1) in read_pozitive(LOGIN):
                 self.home_masive[i][0] = CTkLabel(self.tk_textbox_pozitive, text=row[0])
                 self.home_masive[i][1] = CTkLabel(self.tk_textbox_pozitive, text=row[1])
                 self.home_masive[i][2] = CTkLabel(self.tk_textbox_pozitive, text=row[2])
                 self.home_masive[i][3] = CTkLabel(self.tk_textbox_pozitive, text=row[3])
-                self.home_masive[i][4] = CTkButton(self.tk_textbox_pozitive, text='Вернуть',command=self.recers_pozitive)
+                self.home_masive[i][4] = CTkRadioButton(self.tk_textbox_pozitive, text='Вернуть',width=0,
+                                                        command=self.recers_pozitive, variable=self.radio_var_poz, value=i+1)
                 self.home_masive[i][5] = CTkLabel(self.tk_textbox_pozitive, text='')
             else:
                 self.home_masive[i][0] = CTkLabel(self.tk_textbox_negative, text=row[0])
                 self.home_masive[i][1] = CTkLabel(self.tk_textbox_negative, text=row[1])
                 self.home_masive[i][2] = CTkLabel(self.tk_textbox_negative, text=row[2])
                 self.home_masive[i][3] = CTkLabel(self.tk_textbox_negative, text=row[3])
-                self.home_masive[i][4] = CTkButton(self.tk_textbox_negative, text='Вернуть',command=self.recers_negative)
+                self.home_masive[i][4] = CTkRadioButton(self.tk_textbox_negative, text='Вернуть',width=0,
+                                                        command=self.recers_negative, variable=self.radio_var_neg, value=i+1)
                 self.home_masive[i][5] = CTkLabel(self.tk_textbox_negative, text='')
             i+=1
         self.home_masive_grid(f)
@@ -423,6 +427,7 @@ class App(CTk):
         self.home_masive_delite(f)
         self.pozitive = read_pozitive(LOGIN)
         opisenie_cursor.execute('SELECT name,description,location FROM cities')
+        print(self.radio_var_poz.get())
         self.pozitive.remove(str(self.radio_var_poz.get()))
         self.pozitive = json.dumps(self.pozitive)
         c.execute(f'UPDATE users SET array1 = ? WHERE login = ?',
@@ -436,6 +441,7 @@ class App(CTk):
         self.home_masive_delite(f)
         self.negative = read_negativ(LOGIN)
         opisenie_cursor.execute('SELECT name,description,location FROM cities')
+        print(self.radio_var_neg.get())
         self.negative.remove(str(self.radio_var_neg.get()))
         self.negative = json.dumps(self.negative)
         c.execute(f'UPDATE users SET array2 = ? WHERE login = ?',
@@ -448,6 +454,7 @@ class App(CTk):
         self.home_masive_delite(f)
         self.pozitive = read_pozitive(LOGIN)
         opisenie_cursor.execute('SELECT name,description,location FROM cities')
+        print(self.radio_var_poz.get())
         self.pozitive += str(self.radio_var_poz.get())
         self.pozitive = json.dumps(self.pozitive)
         c.execute(f'UPDATE users SET array1 = ? WHERE login = ?'
@@ -460,7 +467,7 @@ class App(CTk):
         self.home_masive_delite(f)
         self.negative = read_negativ(LOGIN)
         opisenie_cursor.execute('SELECT name,description,location FROM cities')
-        rows = opisenie_cursor.fetchall()
+        print(self.radio_var_neg.get())
         self.negative += str(self.radio_var_neg.get())
         self.negative = json.dumps(self.negative)
         c.execute(f'UPDATE users SET array2 = ? WHERE login = ?'
@@ -478,6 +485,7 @@ class App(CTk):
             self.home_masive[i][4].grid(row=i, column=4)
             if str(i+1) not in read_all(LOGIN):
                 self.home_masive[i][5].grid(row=i, column=5)
+            break
     def home_masive_delite(self, f):
         for i in range(f):
             self.home_masive[i][0].destroy()
