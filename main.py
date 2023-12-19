@@ -427,7 +427,6 @@ class App(CTk):
         self.home_masive_delite(f)
         self.pozitive = read_pozitive(LOGIN)
         opisenie_cursor.execute('SELECT name,description,location FROM cities')
-        print(self.radio_var_poz.get())
         self.pozitive.remove(str(self.radio_var_poz.get()))
         self.pozitive = json.dumps(self.pozitive)
         c.execute(f'UPDATE users SET array1 = ? WHERE login = ?',
@@ -441,7 +440,6 @@ class App(CTk):
         self.home_masive_delite(f)
         self.negative = read_negativ(LOGIN)
         opisenie_cursor.execute('SELECT name,description,location FROM cities')
-        print(self.radio_var_neg.get())
         self.negative.remove(str(self.radio_var_neg.get()))
         self.negative = json.dumps(self.negative)
         c.execute(f'UPDATE users SET array2 = ? WHERE login = ?',
@@ -454,7 +452,6 @@ class App(CTk):
         self.home_masive_delite(f)
         self.pozitive = read_pozitive(LOGIN)
         opisenie_cursor.execute('SELECT name,description,location FROM cities')
-        print(self.radio_var_poz.get())
         self.pozitive += str(self.radio_var_poz.get())
         self.pozitive = json.dumps(self.pozitive)
         c.execute(f'UPDATE users SET array1 = ? WHERE login = ?'
@@ -467,7 +464,6 @@ class App(CTk):
         self.home_masive_delite(f)
         self.negative = read_negativ(LOGIN)
         opisenie_cursor.execute('SELECT name,description,location FROM cities')
-        print(self.radio_var_neg.get())
         self.negative += str(self.radio_var_neg.get())
         self.negative = json.dumps(self.negative)
         c.execute(f'UPDATE users SET array2 = ? WHERE login = ?'
@@ -485,7 +481,6 @@ class App(CTk):
             self.home_masive[i][4].grid(row=i, column=4)
             if str(i+1) not in read_all(LOGIN):
                 self.home_masive[i][5].grid(row=i, column=5)
-            break
     def home_masive_delite(self, f):
         for i in range(f):
             self.home_masive[i][0].destroy()
