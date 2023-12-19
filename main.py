@@ -121,7 +121,7 @@ class App(CTk):
         self.login_label = CTkLabel(self.login_frame,
             text="Регистрация/Вход",
             font=CTkFont(size=30, weight="bold"))
-        self.title("Богадство мира")
+        self.title("Богатство мира")
         if p.read() == '':
             self.grid_rowconfigure(0, weight=1)
             self.grid_columnconfigure(1, weight=1)
@@ -278,10 +278,7 @@ class App(CTk):
                                                 text='', )
         self.home_None.grid(row=3, column=0)
 
-        self.home_Lable_all = CTkLabel(self.home_frame,
-        text='Город        Название                         Описание                  Вид           Уже был         Не хочу быть',
-            font=CTkFont(size=30, weight="bold"))
-        self.home_Lable_all.grid(row=4, column=0)
+
 
 
         # создаем 3 фрейм
@@ -360,6 +357,32 @@ class App(CTk):
         self.tk_textbox.grid_columnconfigure(3, weight=1)
         self.tk_textbox.grid_columnconfigure(4, weight=1)
         self.tk_textbox.grid_columnconfigure(5, weight=1)
+        self.home_Lable_Site = CTkLabel(self.tk_textbox,
+                                       text='Город',
+                                       font=CTkFont(size=30, weight="bold"))
+        self.home_Lable_Site.grid(row=0, column=0)
+        self.home_Lable_Name = CTkLabel(self.tk_textbox,
+                                        text='Название',
+                                        font=CTkFont(size=30, weight="bold"))
+        self.home_Lable_Name.grid(row=0, column=1)
+        self.home_Lable_Opis = CTkLabel(self.tk_textbox,
+                                        text='Описание',
+                                        font=CTkFont(size=30, weight="bold"))
+        self.home_Lable_Opis.grid(row=0, column=2)
+        self.home_Lable_Vid = CTkLabel(self.tk_textbox,
+                                        text='Вид',
+                                        font=CTkFont(size=30, weight="bold"))
+        self.home_Lable_Vid.grid(row=0, column=3)
+        self.home_Lable_Pol = CTkLabel(self.tk_textbox,
+                                        text='Уже был',
+                                        font=CTkFont(size=30, weight="bold"))
+        self.home_Lable_Pol.grid(row=0, column=4)
+        self.home_Lable_Neg = CTkLabel(self.tk_textbox,
+                                        text='Не хочу быть',
+                                        font=CTkFont(size=30, weight="bold"))
+        self.home_Lable_Neg.grid(row=0, column=5)
+
+
         self.home_masive_install()
         # Настройка
         self.navigation_frame_label = CTkLabel(self.third_frame,
@@ -390,7 +413,7 @@ class App(CTk):
         self.radio_var_neg = tkinter.IntVar(value=0)
         # rows = [['Радужный(Ханты-Мансийсы)',# 24
         #          'Радужный(Ханты-Мансийсы)аа', # 26
-        #          'Радужный(Ханты-Мансийский автономный округ)Радужный(Ханты-Мансийскввввввввввааааааапппппаааааааа',
+        #          'Радужный(Ханты-Мансийский автономный округ)Радужный(Ханты-Манс',# 62
         #          'исторические памятники']]# 22 # исторические памятники, здания, природные объекты, парки, музеи, скульптуры, монастыри, храмы
         for row in rows:
             self.mas = [1,2,3,4,5,6]
@@ -474,13 +497,13 @@ class App(CTk):
         self.negative = read_negativ(LOGIN)
     def home_masive_grid(self, f):
         for i in range(f):
-            self.home_masive[i][0].grid(row=i, column=0)
-            self.home_masive[i][1].grid(row=i, column=1)
-            self.home_masive[i][2].grid(row=i, column=2)
-            self.home_masive[i][3].grid(row=i, column=3)
-            self.home_masive[i][4].grid(row=i, column=4)
+            self.home_masive[i][0].grid(row=i+1, column=0)
+            self.home_masive[i][1].grid(row=i+1, column=1)
+            self.home_masive[i][2].grid(row=i+1, column=2)
+            self.home_masive[i][3].grid(row=i+1, column=3)
+            self.home_masive[i][4].grid(row=i+1, column=4)
             if str(i+1) not in read_all(LOGIN):
-                self.home_masive[i][5].grid(row=i, column=5)
+                self.home_masive[i][5].grid(row=i+1, column=5)
     def home_masive_delite(self, f):
         for i in range(f):
             self.home_masive[i][0].destroy()
