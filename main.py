@@ -564,6 +564,11 @@ class App(CTk):
             return 0
         p.close()
         return self.avtor(password)
+    def open_toplevel(self):
+        if self.toplevel_window is None or not self.toplevel_window.winfo_exists():
+            self.toplevel_window = ToplevelWindow(self)  # create window if its None or destroyed
+        else:
+            self.toplevel_window.focus()
 
 if __name__ == "__main__":
     app = App()
