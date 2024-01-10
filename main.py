@@ -68,9 +68,13 @@ c.execute('''
     )
 ''')
 site = sqlite3.connect('file(sgl)/cities.db')
-site.execute('''CREATE TABLE IF NOT EXISTS cities
+sit = site.cursor()
+sit.execute('''CREATE TABLE IF NOT EXISTS cities
              (id INTEGER PRIMARY KEY AUTOINCREMENT,
              name TEXT NOT NULL);''')
+sit.execute('SELECT name FROM cities')
+rowsh = sit.fetchall()
+poisk = ''
 opisenie = sqlite3.connect('file(sgl)/opisenie.db')
 opisenie_cursor = opisenie.cursor()
 opisenie_cursor.execute('''CREATE TABLE IF NOT EXISTS cities
@@ -374,9 +378,9 @@ class App(CTk):
         text="В доработке",
         font=CTkFont(size=30, weight="bold"))
         self.navigation_frame_label.grid(padx=200, pady=100)
-
-        self.home_frame_frame_2_entry = CTkEntry(
-            self.third_frame, placeholder_text="Город", width=1000, height=50)
+        self.home_frame_frame_2_entry = CTkOptionMenu(
+            self.third_frame, values=["Город"]+[i[0] for i in rowsh if poisk in i or poisk=='']
+            , width=1000, height=50)
         self.home_frame_frame_2_entry.grid(row=1, column=0,
                                     padx=200, pady=10, sticky="nsw")
 
@@ -403,8 +407,8 @@ class App(CTk):
         self.bitin_2frame.grid(row=5, column=0, padx=200, pady=10)
 
         self.Error = CTkLabel(self.third_frame
-            , text='Не заполнена(-ы) строка(-и)', height=50)
-
+            , text='', height=50)
+        self.Error.grid(row=6, column=0)
         # Главный фрейм
         self.select_frame_by_name(FRAMGL_NAME)
     def sql_new(self):
@@ -412,8 +416,8 @@ class App(CTk):
         name = self.home_frame_frame_2_entry_name.get()
         opis = self.home_frame_frame_2_entry_opis.get()
         vid = self.home_frame_frame_2_entry_vid.get()
-        if citi != '' and name != '' and opis != '':
-            self.Error.destroy()
+        if citi != '' and name != '' and opis != '' and citi != 'Город':
+            self.Error.configure(text="Внесено в базу данных")
             opisenie_cursor.execute('''CREATE TABLE IF NOT EXISTS cities
                                  (id INTEGER PRIMARY KEY AUTOINCREMENT,
                                  name TEXT NOT NULL,
@@ -422,7 +426,7 @@ class App(CTk):
             add_city_opis(len_txt(citi,24), len_txt(name,26), len_txt(opis,62), vid)
             opisenie.commit()
         else:
-            self.Error.grid(row=6, column=0)
+            self.Error.configure(text="Ошибка")
 
     def home_masive_install(self):
         global LOGIN, f
@@ -586,11 +590,6 @@ class App(CTk):
             return 0
         p.close()
         return self.avtor(password)
-    def open_toplevel(self):
-        if self.toplevel_window is None or not self.toplevel_window.winfo_exists():
-            self.toplevel_window = ToplevelWindow(self)  # create window if its None or destroyed
-        else:
-            self.toplevel_window.focus()
 
 if __name__ == "__main__":
     app = App()
