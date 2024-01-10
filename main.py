@@ -402,20 +402,27 @@ class App(CTk):
             , text='Отправить на проверку', height=50, command=self.sql_new)
         self.bitin_2frame.grid(row=5, column=0, padx=200, pady=10)
 
+        self.Error = CTkLabel(self.third_frame
+            , text='Не заполнена(-ы) строка(-и)', height=50)
+
         # Главный фрейм
         self.select_frame_by_name(FRAMGL_NAME)
     def sql_new(self):
-        citi = input('Город\n')
-        name = input('Название\n')
-        opis = input('Описание\n')
-        vid = input('Вид\n')
-        opisenie_cursor.execute('''CREATE TABLE IF NOT EXISTS cities
-                             (id INTEGER PRIMARY KEY AUTOINCREMENT,
-                             name TEXT NOT NULL,
-                             description TEXT NOT NULL,
-                             location TEXT NOT NULL);''')
-        add_city_opis(len_txt(citi,24), len_txt(name,26), len_txt(opis,62), vid)
-        opisenie.commit()
+        citi = self.home_frame_frame_2_entry.get()
+        name = self.home_frame_frame_2_entry_name.get()
+        opis = self.home_frame_frame_2_entry_opis.get()
+        vid = self.home_frame_frame_2_entry_vid.get()
+        if citi != '' and name != '' and opis != '':
+            self.Error.destroy()
+            opisenie_cursor.execute('''CREATE TABLE IF NOT EXISTS cities
+                                 (id INTEGER PRIMARY KEY AUTOINCREMENT,
+                                 name TEXT NOT NULL,
+                                 description TEXT NOT NULL,
+                                 location TEXT NOT NULL);''')
+            add_city_opis(len_txt(citi,24), len_txt(name,26), len_txt(opis,62), vid)
+            opisenie.commit()
+        else:
+            self.Error.grid(row=6, column=0)
 
     def home_masive_install(self):
         global LOGIN, f
