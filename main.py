@@ -287,9 +287,9 @@ class App(CTk):
             fg_color="transparent")
         # Настройка
         self.navigation_frame2_label = CTkLabel(
-                self.second_frame,
-                text=LOGIN,
-                font=CTkFont(size=30, weight="bold"))
+            self.second_frame,
+            text="Login: "+LOGIN,
+            font=CTkFont(size=30, weight="bold"))
         self.navigation_frame2_label.grid(padx=200, pady=100)
         # создаем 2 фрейм
         self.third_frame = CTkFrame(self, corner_radius=0,
@@ -334,30 +334,17 @@ class App(CTk):
         self.tk_textbox_pozitive = CTkScrollableFrame(self.pozitive_frame,
                                         height=screen_height - 250)
         self.tk_textbox_pozitive.grid(sticky="nsew")
-        self.tk_textbox_pozitive.grid_columnconfigure(0, weight=1)
-        self.tk_textbox_pozitive.grid_columnconfigure(1, weight=1)
-        self.tk_textbox_pozitive.grid_columnconfigure(2, weight=1)
-        self.tk_textbox_pozitive.grid_columnconfigure(3, weight=1)
-        self.tk_textbox_pozitive.grid_columnconfigure(4, weight=1)
+        self.tk_textbox_pozitive.grid_columnconfigure((0,1,2,3,4), weight=1)
 
         self.tk_textbox_negative = CTkScrollableFrame(self.negative_frame,
                                         height=screen_height - 250)
         self.tk_textbox_negative.grid(sticky="nsew")
-        self.tk_textbox_negative.grid_columnconfigure(0, weight=1)
-        self.tk_textbox_negative.grid_columnconfigure(1, weight=1)
-        self.tk_textbox_negative.grid_columnconfigure(2, weight=1)
-        self.tk_textbox_negative.grid_columnconfigure(3, weight=1)
-        self.tk_textbox_negative.grid_columnconfigure(4, weight=1)
+        self.tk_textbox_negative.grid_columnconfigure((0,1,2,3,4), weight=1)
 
         self.tk_textbox = CTkScrollableFrame(self.home_frame,
                                 height=screen_height-250)
         self.tk_textbox.grid(row=5, column=0, sticky="nsew")
-        self.tk_textbox.grid_columnconfigure(0, weight=1)
-        self.tk_textbox.grid_columnconfigure(1, weight=1)
-        self.tk_textbox.grid_columnconfigure(2, weight=1)
-        self.tk_textbox.grid_columnconfigure(3, weight=1)
-        self.tk_textbox.grid_columnconfigure(4, weight=1)
-        self.tk_textbox.grid_columnconfigure(5, weight=1)
+        self.tk_textbox.grid_columnconfigure((0,1,2,3,4,5), weight=1)
         self.home_Lable_Site = CTkLabel(self.tk_textbox,
                                        text='Город',
                                        font=CTkFont(size=30, weight="bold"))
@@ -407,7 +394,9 @@ class App(CTk):
                                     padx=200, pady=10, sticky="nsw")
 
         self.home_frame_frame_2_entry_vid = CTkOptionMenu(
-            self.third_frame, values=["Light", "Dark", "System"],width=1000, height=50)
+            self.third_frame, values=[
+                "исторические памятники", "здания", "природные объекты", "парки", "музеи",
+                "скульптуры", "монастыри", "храмы"],width=1000, height=50)
         self.home_frame_frame_2_entry_vid.grid(row=4, column=0,
                                     padx=200, pady=10, sticky="nsw")
 
