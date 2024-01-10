@@ -87,6 +87,7 @@ set_default_color_theme("dark-blue")
 class App(CTk):
     def __init__(self):
         super().__init__()
+        self.toplevel_window = None
         screen_width = self.winfo_screenwidth()
         image_path = os.path.join(os.path.dirname(
             os.path.realpath(__file__)), "test_images")
@@ -389,13 +390,32 @@ class App(CTk):
         text="В доработке",
         font=CTkFont(size=30, weight="bold"))
         self.navigation_frame_label.grid(padx=200, pady=100)
+
         self.home_frame_frame_2_entry = CTkEntry(
-            self.third_frame, width=1000, height=50)
+            self.third_frame, placeholder_text="Город", width=1000, height=50)
         self.home_frame_frame_2_entry.grid(row=1, column=0,
                                     padx=200, pady=10, sticky="nsw")
+
+        self.home_frame_frame_2_entry_name = CTkEntry(
+            self.third_frame, placeholder_text="Название", width=1000, height=50)
+        self.home_frame_frame_2_entry_name.grid(row=2, column=0,
+                                    padx=200, pady=10, sticky="nsw")
+
+        self.home_frame_frame_2_entry_opis = CTkEntry(
+            self.third_frame, placeholder_text="Описание", width=1000, height=50)
+        self.home_frame_frame_2_entry_opis.grid(row=3, column=0,
+                                    padx=200, pady=10, sticky="nsw")
+
+        self.home_frame_frame_2_entry_vid = CTkOptionMenu(
+            self.third_frame, values=["Light", "Dark", "System"],width=1000, height=50)
+        self.home_frame_frame_2_entry_vid.grid(row=4, column=0,
+                                    padx=200, pady=10, sticky="nsw")
+
+
         self.bitin_2frame = CTkButton(self.third_frame
             , text='Отправить на проверку', height=50)
-        self.bitin_2frame.grid(row=2, column=0, padx=200, pady=10)
+        self.bitin_2frame.grid(row=5, column=0, padx=200, pady=10)
+
         # Главный фрейм
         self.select_frame_by_name(FRAMGL_NAME)
     def home_masive_install(self):
@@ -573,7 +593,6 @@ class App(CTk):
 if __name__ == "__main__":
     app = App()
     app.mainloop()
-
     conn.close()
     site.close()
     opisenie.close()
