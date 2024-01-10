@@ -1,4 +1,3 @@
-#pip3 install -r requirements.txt
 from PIL import Image
 import os
 import sqlite3
@@ -54,6 +53,8 @@ def read_all(login):
     a = list(read_negativ(login)+read_pozitive(login))
     a.sort()
     return a
+def len_txt(txt, minys):
+    return ((len(txt)-minys)//2 + (len(txt)-minys)%2)*''+txt+' '*((len(txt)-minys)//2)
 
 conn = sqlite3.connect('file(sgl)/database.db')
 c = conn.cursor()
@@ -78,10 +79,6 @@ opisenie_cursor.execute('''CREATE TABLE IF NOT EXISTS cities
              description TEXT NOT NULL,
              location TEXT NOT NULL,
              vid TEXT NOT NULL);''')
-#Красная площадь - историческое и культурное сердце Москвы, на которой расположены Кремль, Храм Василия Блаженного и Мавзолей Ленина.
-# add_city_opis("Москва", "Красная площадь", "историческое и культурное сердце Москвы, на которой расположены Кремль, Храм Василия Блаженного и Мавзолей Ленина.",
-#               "иторическая ценность")
-# opisenie.commit()
 set_appearance_mode("light")
 set_default_color_theme("dark-blue")
 class App(CTk):
@@ -395,18 +392,31 @@ class App(CTk):
 
         self.home_frame_frame_2_entry_vid = CTkOptionMenu(
             self.third_frame, values=[
-                "исторические памятники", "здания", "природные объекты", "парки", "музеи",
-                "скульптуры", "монастыри", "храмы"],width=1000, height=50)
+                "исторический памятник", "здание", "природный объект", "парк", "музей",
+                "скульптура", "монастырь", "храм"],width=1000, height=50)
         self.home_frame_frame_2_entry_vid.grid(row=4, column=0,
                                     padx=200, pady=10, sticky="nsw")
 
 
         self.bitin_2frame = CTkButton(self.third_frame
-            , text='Отправить на проверку', height=50)
+            , text='Отправить на проверку', height=50, command=self.sql_new)
         self.bitin_2frame.grid(row=5, column=0, padx=200, pady=10)
 
         # Главный фрейм
         self.select_frame_by_name(FRAMGL_NAME)
+    def sql_new(self):
+        citi = input('Город\n')
+        name = input('Название\n')
+        opis = input('Описание\n')
+        vid = input('Вид\n')
+        opisenie_cursor.execute('''CREATE TABLE IF NOT EXISTS cities
+                             (id INTEGER PRIMARY KEY AUTOINCREMENT,
+                             name TEXT NOT NULL,
+                             description TEXT NOT NULL,
+                             location TEXT NOT NULL);''')
+        add_city_opis(len_txt(citi,24), len_txt(name,26), len_txt(opis,62), vid)
+        opisenie.commit()
+
     def home_masive_install(self):
         global LOGIN, f
         p = open('file(sgl)/Логин', 'r', encoding="UTF-8")
@@ -420,10 +430,6 @@ class App(CTk):
         i = 0
         self.radio_var_poz = tkinter.IntVar(value=0)
         self.radio_var_neg = tkinter.IntVar(value=0)
-        # rows = [['Радужный(Ханты-Мансийсы)',# 24
-        #          'Радужный(Ханты-Мансийсы)аа', # 26
-        #          'Радужный(Ханты-Мансийский автономный округ)Радужный(Ханты-Манс',# 62
-        #          'исторические памятники']]# 22 # исторические памятники, здания, природные объекты, парки, музеи, скульптуры, монастыри, храмы
         for row in rows:
             self.mas = [1,2,3,4,5,6]
             self.home_masive.append(self.mas)
