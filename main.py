@@ -378,37 +378,53 @@ class App(CTk):
         text="В доработке",
         font=CTkFont(size=30, weight="bold"))
         self.navigation_frame_label.grid(padx=200, pady=100)
+        j = 1
+        self.home_frame_frame_2_entry2 = CTkEntry(
+            self.third_frame, placeholder_text="Назвоние города", width=1000, height=50)
+        self.home_frame_frame_2_entry2.grid(row=j, column=0,
+                                                padx=200, pady=10, sticky="nsw")
+        j+=1
+
+        self.home_frame_frame_2_entry2_buton = CTkButton(self.third_frame, text="Поиск города", command=self.pois)
+        self.home_frame_frame_2_entry2_buton.grid(row=j, column=0,
+                                                padx=200, pady=10, sticky="nsw")
+
+        j+=1
         self.home_frame_frame_2_entry = CTkOptionMenu(
             self.third_frame, values=["Город"]+[i[0] for i in rowsh if poisk in i or poisk=='']
             , width=1000, height=50)
-        self.home_frame_frame_2_entry.grid(row=1, column=0,
+        self.home_frame_frame_2_entry.grid(row=j, column=0,
                                     padx=200, pady=10, sticky="nsw")
+        j+=1
 
         self.home_frame_frame_2_entry_name = CTkEntry(
             self.third_frame, placeholder_text="Название", width=1000, height=50)
-        self.home_frame_frame_2_entry_name.grid(row=2, column=0,
+        self.home_frame_frame_2_entry_name.grid(row=j, column=0,
                                     padx=200, pady=10, sticky="nsw")
+        j += 1
 
         self.home_frame_frame_2_entry_opis = CTkEntry(
             self.third_frame, placeholder_text="Описание", width=1000, height=50)
-        self.home_frame_frame_2_entry_opis.grid(row=3, column=0,
+        self.home_frame_frame_2_entry_opis.grid(row=j, column=0,
                                     padx=200, pady=10, sticky="nsw")
+        j += 1
 
         self.home_frame_frame_2_entry_vid = CTkOptionMenu(
             self.third_frame, values=[
                 "исторический памятник", "здание", "природный объект", "парк", "музей",
                 "скульптура", "монастырь", "храм"],width=1000, height=50)
-        self.home_frame_frame_2_entry_vid.grid(row=4, column=0,
+        self.home_frame_frame_2_entry_vid.grid(row=j, column=0,
                                     padx=200, pady=10, sticky="nsw")
-
+        j += 1
 
         self.bitin_2frame = CTkButton(self.third_frame
             , text='Отправить на проверку', height=50, command=self.sql_new)
-        self.bitin_2frame.grid(row=5, column=0, padx=200, pady=10)
+        self.bitin_2frame.grid(row=j, column=0, padx=200, pady=10)
+        j += 1
 
         self.Error = CTkLabel(self.third_frame
             , text='', height=50)
-        self.Error.grid(row=6, column=0)
+        self.Error.grid(row=j, column=0)
         # Главный фрейм
         self.select_frame_by_name(FRAMGL_NAME)
     def sql_new(self):
@@ -427,6 +443,9 @@ class App(CTk):
             opisenie.commit()
         else:
             self.Error.configure(text="Ошибка")
+    def pois(self):
+        poisk = self.home_frame_frame_2_entry2.get()
+        self.home_frame_frame_2_entry.configure(values = ["Город"] + [i[0] for i in rowsh if poisk in i or poisk == ''])
 
     def home_masive_install(self):
         global LOGIN, f
