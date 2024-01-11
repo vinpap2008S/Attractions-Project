@@ -54,8 +54,10 @@ def read_all(login):
     a.sort()
     return a
 def len_txt(txt, minys):
-    return ((len(txt)-minys)//2 + (len(txt)-minys)%2)*''+txt+' '*((len(txt)-minys)//2)
-
+    if len(txt) <= minys:
+        return ((len(txt)-minys)//2 + (len(txt)-minys)%2)*''+txt+' '*((len(txt)-minys)//2)
+    else:
+        return txt[:minys-3] + "..."
 
 conn = sqlite3.connect('file(sgl)/database.db')
 c = conn.cursor()
