@@ -379,7 +379,7 @@ class App(CTk):
         self.home_masive_install()
         # Настройка
         self.navigation_frame_label = CTkLabel(self.third_frame,
-        text="В доработке",
+        text="В пишите данные для добавления новых мест",
         font=CTkFont(size=30, weight="bold"))
         self.navigation_frame_label.grid(padx=200, pady=100)
         j = 1
