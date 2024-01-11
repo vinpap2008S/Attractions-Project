@@ -56,6 +56,7 @@ def read_all(login):
 def len_txt(txt, minys):
     return ((len(txt)-minys)//2 + (len(txt)-minys)%2)*''+txt+' '*((len(txt)-minys)//2)
 
+
 conn = sqlite3.connect('file(sgl)/database.db')
 c = conn.cursor()
 c.execute('''
@@ -74,7 +75,7 @@ sit.execute('''CREATE TABLE IF NOT EXISTS cities
              name TEXT NOT NULL);''')
 sit.execute('SELECT name FROM cities')
 rowsh = sit.fetchall()
-poisk = ''
+
 opisenie = sqlite3.connect('file(sgl)/opisenie.db')
 opisenie_cursor = opisenie.cursor()
 opisenie_cursor.execute('''CREATE TABLE IF NOT EXISTS cities
@@ -186,6 +187,7 @@ class App(CTk):
             return
         self.login_label.destroy()
         self.login_frame.destroy()
+        self.poisk = ''
         self.after(0, lambda:self.state('zoomed'))
         p = open('file(sgl)/Логин', 'r', encoding="UTF-8")
         LOGIN = p.read()
@@ -384,14 +386,13 @@ class App(CTk):
         self.home_frame_frame_2_entry2.grid(row=j, column=0,
                                                 padx=200, pady=10, sticky="nsw")
         j+=1
-
+        global poisk
         self.home_frame_frame_2_entry2_buton = CTkButton(self.third_frame, text="Поиск города", command=self.pois)
         self.home_frame_frame_2_entry2_buton.grid(row=j, column=0,
                                                 padx=200, pady=10, sticky="nsw")
-
         j+=1
         self.home_frame_frame_2_entry = CTkOptionMenu(
-            self.third_frame, values=["Город"]+[i[0] for i in rowsh if poisk in i or poisk=='']
+            self.third_frame, values=["Город"]+[i[0] for i in rowsh if self.poisk in i or self.poisk=='']
             , width=1000, height=50)
         self.home_frame_frame_2_entry.grid(row=j, column=0,
                                     padx=200, pady=10, sticky="nsw")
@@ -444,9 +445,10 @@ class App(CTk):
         else:
             self.Error.configure(text="Ошибка")
     def pois(self):
-        poisk = self.home_frame_frame_2_entry2.get()
-        self.home_frame_frame_2_entry.configure(values = ["Город"] + [i[0] for i in rowsh if poisk in i or poisk == ''])
-
+        self.poisk = self.home_frame_frame_2_entry2.get()
+        self.poisk = self.poisk[0].upper() + self.poisk[1:].lower()
+        print([i[0] for i in rowsh if (self.poisk in i[0]) or self.poisk == ''])
+        self.home_frame_frame_2_entry.configure(values = ["Город"] + [i[0] for i in rowsh if (self.poisk in i[0]) or self.poisk == ''])
     def home_masive_install(self):
         global LOGIN, f
         p = open('file(sgl)/Логин', 'r', encoding="UTF-8")
