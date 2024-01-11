@@ -447,7 +447,6 @@ class App(CTk):
     def pois(self):
         self.poisk = self.home_frame_frame_2_entry2.get()
         self.poisk = self.poisk[0].upper() + self.poisk[1:].lower()
-        print([i[0] for i in rowsh if (self.poisk in i[0]) or self.poisk == ''])
         self.home_frame_frame_2_entry.configure(values = ["Город"] + [i[0] for i in rowsh if (self.poisk in i[0]) or self.poisk == ''])
     def home_masive_install(self):
         global LOGIN, f
