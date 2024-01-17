@@ -59,7 +59,6 @@ def len_txt(txt, minys):
         return ((len(txt)-minys)//2 + (len(txt)-minys)%2)*''+txt+' '*((len(txt)-minys)//2)
     else:
         return txt[:minys-3] + "..."
-
 conn = sqlite3.connect('file(sgl)/database.db')
 c = conn.cursor()
 c.execute('''
@@ -78,7 +77,6 @@ sit.execute('''CREATE TABLE IF NOT EXISTS cities
              name TEXT NOT NULL);''')
 sit.execute('SELECT name FROM cities')
 rowsh = sit.fetchall()
-
 opisenie = sqlite3.connect('file(sgl)/opisenie.db')
 opisenie_cursor = opisenie.cursor()
 opisenie_cursor.execute('''CREATE TABLE IF NOT EXISTS cities
@@ -185,6 +183,14 @@ class App(CTk):
     def frame_3_button_event(self):self.select_frame_by_name(FRAM2_NAME)
     def frame_4_button_event(self):self.select_frame_by_name(FRAM3_NAME)
     def frame_5_button_event(self):self.select_frame_by_name(FRAM4_NAME)
+    def poisk_cite(self):
+        self.poi = self.home_frame__entry2.get()
+        if self.poi != "":
+            self.poi = self.poi[0].upper() + self.poi[1:].lower()
+        self.home_frame_entry.configure(
+            values=["Город"] + [i[0] for i in rowsh if (self.poi in i[0]) or self.poi == ''])
+    def poisk_all(self):
+        ...
     def main(self):
         if self.login_event():
             return
@@ -273,19 +279,48 @@ class App(CTk):
 
         self.home_Lable = CTkLabel(self.home_frame,
         text='Главная', font=CTkFont(size=40, weight="bold"))
-        self.home_Lable.grid()
+        self.home_Lable.grid(columnspan=10)
 
         self.home_None = CTkLabel(self.home_frame,
         text='',)
-        self.home_None.grid(row=1, column=0)
+        self.home_None.grid(row=1, columnspan=10)
         self.home_None = CTkLabel(self.home_frame,
                                                 text='', )
-        self.home_None.grid(row=2, column=0)
+        self.home_None.grid(row=2, columnspan=10)
         self.home_None = CTkLabel(self.home_frame,
                                                 text='', )
-        self.home_None.grid(row=3, column=0)
+        self.home_None.grid(row=3, columnspan=10)
+        for i in range(6):
+            self.home_frame.grid_columnconfigure(i, weight=1)
 
+        self.home_frame__entry2 = CTkEntry(
+            self.home_frame, placeholder_text="Название города", width=200, height=50)
+        self.home_frame__entry2.grid(row=4, column=0,
+                                            padx=10, pady=10, sticky="nsw")
 
+        self.home_frame_entry2_buton = CTkButton(self.home_frame, text="Поиск города", command=self.poisk_cite)
+        self.home_frame_entry2_buton.grid(row=4, column=1,padx=10,
+                                                  pady=10, sticky="nsw")
+
+        self.home_frame_entry = CTkOptionMenu(
+            self.home_frame, values=["Город"] + [i[0] for i in rowsh if self.poisk in i or self.poisk == '']
+            , width=200, height=50)
+        self.home_frame_entry.grid(row=4, column=2,padx=10,
+                                           pady=10, sticky="nsw")
+        self.home_frame_entry_name = CTkEntry(
+            self.home_frame, placeholder_text="Название места", width=200, height=50)
+        self.home_frame_entry_name.grid(row=4, column=3,
+                                            padx=10, pady=10, sticky="nsw")
+        self.home_frame_entry_vid = CTkOptionMenu(
+            self.home_frame, values=["Вид",
+                "исторический памятник", "здание", "природный объект", "парк", "музей",
+                "скульптура", "монастырь", "храм"], width=200, height=50)
+        self.home_frame_entry_vid.grid(row=4, column=4,padx=10,
+                                               pady=10, sticky="nsw")
+
+        self.home_frame_entry2_buton_1 = CTkButton(self.home_frame, text="Поиск", command=self.poisk_all)
+        self.home_frame_entry2_buton_1.grid(row=4, column=5,padx=10,
+                                                  pady=10, sticky="nsw")
 
 
         # создаем 3 фрейм
@@ -349,7 +384,7 @@ class App(CTk):
 
         self.tk_textbox = CTkScrollableFrame(self.home_frame,
                                 height=screen_height-250)
-        self.tk_textbox.grid(row=5, column=0, sticky="nsew")
+        self.tk_textbox.grid(row=5, columnspan=10, sticky="nsew")
         self.tk_textbox.grid_columnconfigure((0,1,2,3,4,5), weight=1)
         self.home_Lable_Site = CTkLabel(self.tk_textbox,
                                        text='Город',
@@ -449,7 +484,8 @@ class App(CTk):
             self.Error.configure(text="Ошибка")
     def pois(self):
         self.poisk = self.home_frame_frame_2_entry2.get()
-        self.poisk = self.poisk[0].upper() + self.poisk[1:].lower()
+        if self.poisk != "":
+            self.poisk = self.poisk[0].upper() + self.poisk[1:].lower()
         self.home_frame_frame_2_entry.configure(values = ["Город"] + [i[0] for i in rowsh if (self.poisk in i[0]) or self.poisk == ''])
     def home_masive_install(self):
         global LOGIN, f
@@ -546,13 +582,13 @@ class App(CTk):
         self.negative = read_negativ(LOGIN)
     def home_masive_grid(self, f):
         for i in range(f):
-            self.home_masive[i][0].grid(row=i+1, column=0)
-            self.home_masive[i][1].grid(row=i+1, column=1)
-            self.home_masive[i][2].grid(row=i+1, column=2)
-            self.home_masive[i][3].grid(row=i+1, column=3)
-            self.home_masive[i][4].grid(row=i+1, column=4)
+            self.home_masive[i][0].grid(row=i+2, column=0)
+            self.home_masive[i][1].grid(row=i+2, column=1)
+            self.home_masive[i][2].grid(row=i+2, column=2)
+            self.home_masive[i][3].grid(row=i+2, column=3)
+            self.home_masive[i][4].grid(row=i+2, column=4)
             if str(i+1) not in read_all(LOGIN):
-                self.home_masive[i][5].grid(row=i+1, column=5)
+                self.home_masive[i][5].grid(row=i+2, column=5)
     def home_masive_delite(self, f):
         for i in range(f):
             self.home_masive[i][0].destroy()
