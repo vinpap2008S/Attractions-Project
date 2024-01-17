@@ -90,6 +90,9 @@ set_default_color_theme("dark-blue")
 class App(CTk):
     def __init__(self):
         super().__init__()
+        self.cites_poisk = ""
+        self.name_poisk = ""
+        self.vid_poisk = ""
         self.toplevel_window = None
         screen_width = self.winfo_screenwidth()
         image_path = os.path.join(os.path.dirname(
@@ -190,7 +193,10 @@ class App(CTk):
         self.home_frame_entry.configure(
             values=["Город"] + [i[0] for i in rowsh if (self.poi in i[0]) or self.poi == ''])
     def poisk_all(self):
-        ...
+        self.cites_poisk = self.home_frame_entry.grid() if self.home_frame_entry.grid()!= "Город" else ""
+        self.name_poisk = self.home_frame_entry_name.grid()
+        self.vid_poisk = self.home_frame_entry_vid.grid() if self.home_frame_entry_vid.grid() != "Вид" else ""
+        self.home_masive_install()
     def main(self):
         if self.login_event():
             return
@@ -292,6 +298,7 @@ class App(CTk):
         self.home_None.grid(row=3, columnspan=10)
         for i in range(6):
             self.home_frame.grid_columnconfigure(i, weight=1)
+
 
         self.home_frame__entry2 = CTkEntry(
             self.home_frame, placeholder_text="Название города", width=200, height=50)
@@ -582,13 +589,23 @@ class App(CTk):
         self.negative = read_negativ(LOGIN)
     def home_masive_grid(self, f):
         for i in range(f):
-            self.home_masive[i][0].grid(row=i+2, column=0)
-            self.home_masive[i][1].grid(row=i+2, column=1)
-            self.home_masive[i][2].grid(row=i+2, column=2)
-            self.home_masive[i][3].grid(row=i+2, column=3)
-            self.home_masive[i][4].grid(row=i+2, column=4)
+            print(self.home_masive[i][0].cget("text"))
             if str(i+1) not in read_all(LOGIN):
-                self.home_masive[i][5].grid(row=i+2, column=5)
+                if 1 or self.proverka(self.home_masive[i][0].cget("text"),
+                self.home_masive[i][1].cget("text"),
+                self.home_masive[i][3].cget("text")):
+                    self.home_masive[i][0].grid(row=i+2, column=0)
+                    self.home_masive[i][1].grid(row=i+2, column=1)
+                    self.home_masive[i][2].grid(row=i+2, column=2)
+                    self.home_masive[i][3].grid(row=i+2, column=3)
+                    self.home_masive[i][4].grid(row=i+2, column=4)
+                    self.home_masive[i][5].grid(row=i+2, column=5)
+            else:
+                self.home_masive[i][0].grid(row=i + 2, column=0)
+                self.home_masive[i][1].grid(row=i + 2, column=1)
+                self.home_masive[i][2].grid(row=i + 2, column=2)
+                self.home_masive[i][3].grid(row=i + 2, column=3)
+                self.home_masive[i][4].grid(row=i + 2, column=4)
     def home_masive_delite(self, f):
         for i in range(f):
             self.home_masive[i][0].destroy()
@@ -649,6 +666,8 @@ class App(CTk):
             return 0
         p.close()
         return self.avtor(password)
+    def proverka(self, cite, name, vid):
+        ...
 
 if __name__ == "__main__":
     app = App()
