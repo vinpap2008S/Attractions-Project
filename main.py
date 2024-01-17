@@ -1,3 +1,4 @@
+# pip install -r requirements.txt
 from PIL import Image
 import os
 import sqlite3
