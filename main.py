@@ -303,8 +303,7 @@ class App(CTk):
         self.home_None = CTkLabel(self.home_frame,
                                                 text='', )
         self.home_None.grid(row=3, columnspan=10)
-        for i in range(6):
-            self.home_frame.grid_columnconfigure(i, weight=1)
+        self.home_frame.grid_columnconfigure([0,1,2,3,4,5], weight=1)
 
 
         self.home_frame__entry2 = CTkEntry(
