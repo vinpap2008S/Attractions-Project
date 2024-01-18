@@ -87,6 +87,7 @@ opisenie_cursor.execute('''CREATE TABLE IF NOT EXISTS cities
              vid TEXT NOT NULL);''')
 set_appearance_mode("light")
 set_default_color_theme("dark-blue")
+
 class App(CTk):
     def __init__(self):
         super().__init__()
@@ -193,9 +194,15 @@ class App(CTk):
         self.home_frame_entry.configure(
             values=["Город"] + [i[0] for i in rowsh if (self.poi in i[0]) or self.poi == ''])
     def poisk_all(self):
-        self.cites_poisk = self.home_frame_entry.grid() if self.home_frame_entry.grid()!= "Город" else ""
-        self.name_poisk = self.home_frame_entry_name.grid()
-        self.vid_poisk = self.home_frame_entry_vid.grid() if self.home_frame_entry_vid.grid() != "Вид" else ""
+        self.cites_poisk = self.home_frame_entry.get() if(
+                self.home_frame_entry.get() != "Город"
+                and self.home_frame_entry.get() is not None) else ""
+        self.name_poisk = self.home_frame_entry_name.get()\
+            if self.home_frame_entry_name.get() is not None else ""
+        self.vid_poisk = self.home_frame_entry_vid.get() if (
+                self.home_frame_entry_vid.get() != "Вид" and
+                self.home_frame_entry_vid.get() is not None)else ""
+        self.home_masive_delite(f)
         self.home_masive_install()
     def main(self):
         if self.login_event():
@@ -488,7 +495,7 @@ class App(CTk):
             add_city_opis(len_txt(citi,24), len_txt(name,26), len_txt(opis,62), vid)
             opisenie.commit()
         else:
-            self.Error.configure(text="Ошибка")
+            self.Error.configure(text="Не всё заполнено")
     def pois(self):
         self.poisk = self.home_frame_frame_2_entry2.get()
         if self.poisk != "":
@@ -589,17 +596,16 @@ class App(CTk):
         self.negative = read_negativ(LOGIN)
     def home_masive_grid(self, f):
         for i in range(f):
-            print(self.home_masive[i][0].cget("text"))
             if str(i+1) not in read_all(LOGIN):
-                if 1 or self.proverka(self.home_masive[i][0].cget("text"),
+                if self.proverka(self.home_masive[i][0].cget("text"),
                 self.home_masive[i][1].cget("text"),
                 self.home_masive[i][3].cget("text")):
-                    self.home_masive[i][0].grid(row=i+2, column=0)
-                    self.home_masive[i][1].grid(row=i+2, column=1)
-                    self.home_masive[i][2].grid(row=i+2, column=2)
-                    self.home_masive[i][3].grid(row=i+2, column=3)
-                    self.home_masive[i][4].grid(row=i+2, column=4)
-                    self.home_masive[i][5].grid(row=i+2, column=5)
+                    self.home_masive[i][0].grid(row=i +2, column=0)
+                    self.home_masive[i][1].grid(row=i + 2, column=1)
+                    self.home_masive[i][2].grid(row=i + 2, column=2)
+                    self.home_masive[i][3].grid(row=i + 2, column=3)
+                    self.home_masive[i][4].grid(row=i + 2, column=4)
+                    self.home_masive[i][5].grid(row=i + 2, column=5)
             else:
                 self.home_masive[i][0].grid(row=i + 2, column=0)
                 self.home_masive[i][1].grid(row=i + 2, column=1)
@@ -667,7 +673,10 @@ class App(CTk):
         p.close()
         return self.avtor(password)
     def proverka(self, cite, name, vid):
-        ...
+        return ((self.cites_poisk == cite or self.cites_poisk == "") and
+                (self.name_poisk in name) and
+                (self.vid_poisk == vid or self.vid_poisk == ""))
+
 
 if __name__ == "__main__":
     app = App()
