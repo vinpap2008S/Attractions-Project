@@ -600,7 +600,7 @@ class App(CTk):
                 if self.proverka(self.home_masive[i][0].cget("text"),
                 self.home_masive[i][1].cget("text"),
                 self.home_masive[i][3].cget("text")):
-                    self.home_masive[i][0].grid(row=i +2, column=0)
+                    self.home_masive[i][0].grid(row=i + 2, column=0)
                     self.home_masive[i][1].grid(row=i + 2, column=1)
                     self.home_masive[i][2].grid(row=i + 2, column=2)
                     self.home_masive[i][3].grid(row=i + 2, column=3)
