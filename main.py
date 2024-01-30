@@ -98,9 +98,6 @@ class App(CTk):
         screen_width = self.winfo_screenwidth()
         image_path = os.path.join(os.path.dirname(
             os.path.realpath(__file__)), "test_images")
-        self.logo_image = CTkImage(Image.open(
-            os.path.join(image_path, "CustomTkinter_logo_single.png")),
-            size=(26, 26))
         self.home_image = CTkImage(light_image=Image.open(
             os.path.join(image_path, "home_dark.png")),
             dark_image=Image.open(os.path.join(image_path, "home_light.png")),
@@ -225,8 +222,7 @@ class App(CTk):
         self.navigation_frame.grid_rowconfigure(6, weight=1)
         self.navigation_frame_label = CTkLabel(
                 self.navigation_frame,
-                text="  Image Example",
-                image=self.logo_image, compound="left",
+                text="Богатство мира",compound="left",
                 font=CTkFont(size=15, weight="bold"))
         self.navigation_frame_label.grid(row=0, column=0, padx=20, pady=20)
         # 1 фрейм
